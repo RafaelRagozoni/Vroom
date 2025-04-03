@@ -9,8 +9,14 @@ public class ReshapeRoom : MonoBehaviour
     public Transform paredeBack;
     public Transform teto;
     public Transform chao;
-    public Vector3 roomSize;
+    public Transform pointLight;
+    public Vector3 roomSizeNow;
+    public Vector3 roomSizeTarget;
     public Vector3 roomSizeBase;
+    public TMPro.TMP_Text xText;
+    public TMPro.TMP_Text yText;
+    public TMPro.TMP_Text zText;
+
 
     void change(Vector3 roomSizeNow){
         float room_x = roomSizeNow.x;
@@ -38,6 +44,7 @@ public class ReshapeRoom : MonoBehaviour
         paredeBack.localScale = frontScale;
 
         teto.position = tetoPos;
+        pointLight.position = tetoPos;
         paredeEsq.position = esqPos;
         paredeDir.position = dirPos;
         paredeFront.position = frontPos;
@@ -48,15 +55,20 @@ public class ReshapeRoom : MonoBehaviour
     void Start()
     {
         change(roomSizeBase);
-        RemodelateRoom(roomSizeBase, roomSize, 10f);
+        xText.text = $"X: {roomSizeBase.x}";
+        yText.text = $"Y: {roomSizeBase.y}";
+        zText.text = $"Z: {roomSizeBase.z}";
+        roomSizeNow = roomSizeBase;
     }
 
-    public void RemodelateRoom(Vector3 dimensoesInicio, Vector3 dimensoesFim, float duracao)
+    public void RemodelateRoom()
     {
-        StartCoroutine(InterpolateVector(dimensoesInicio, dimensoesFim, duracao));
+        float duracao = 10f;
+        StartCoroutine(InterpolateVector(roomSizeNow, roomSizeTarget, duracao));
+        roomSizeNow = roomSizeTarget;
     }
 
-    private IEnumerator InterpolateVector(Vector3 inicio, Vector3 fim, float duracao)
+    public IEnumerator InterpolateVector(Vector3 inicio, Vector3 fim, float duracao)
     {
         float tempo = 0f;
         while (tempo < duracao)
@@ -67,10 +79,13 @@ public class ReshapeRoom : MonoBehaviour
             yield return null;
         }
     }
-    
-    // Update is called once per frame
-    void Update()
+
+    public void OnBase()
     {
-        
+        roomSizeTarget = roomSizeBase;
+        RemodelateRoom();
+        xText.text = $"X: {roomSizeTarget.x}";
+        yText.text = $"Y: {roomSizeTarget.y}";
+        zText.text = $"Z: {roomSizeTarget.z}";
     }
 }
