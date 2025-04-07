@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 2ee313d9866d247458f630bc52d727b7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - prefabTV: {fileID: 5372549914703172579, guid: bf961bd4b92c0d84d99d19b79779a24a, type: 3}
+  - sceneCamera: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
