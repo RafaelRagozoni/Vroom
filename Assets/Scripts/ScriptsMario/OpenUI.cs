@@ -11,38 +11,8 @@ public class OpenUI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        interactable = GetComponent<RayInteractable>();
-
-        if (interactable != null)
-        {
-            // Monitora mudanças de estado para detectar quando o cubo (filho) é selecionado
-            interactable.WhenStateChanged += (args) =>
-            {
-                if (args.NewState == InteractableState.Select)
-                {
-                    OpenUIFunction();
-                }
-            };
-        }
-        else
-        {
-            Debug.LogError("RayInteractable não encontrado!");
-        }
+        
     }
-
-    //public void OpenUIFunction()
-    //{
-    //    // Posiciona a UI 5 unidades à frente da câmera
-    //    Canvas.transform.position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
-
-    //    // Garante que a UI esteja sempre voltada para a câmera
-    //    //Canvas.transform.LookAt(sceneCamera.transform);
-
-    //    // Roda a UI em torno do eixo Y para ficar a 90º da câmera
-    //    //Canvas.transform.rotation = Quaternion.Euler(0, 180, 0);
-
-    //    Canvas.SetActive(true);
-    //}
 
     public void OpenUIFunction()
     {

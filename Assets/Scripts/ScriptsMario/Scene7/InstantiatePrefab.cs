@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
+using Oculus.Interaction;
 
 public class InstantiatePrefab : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class InstantiatePrefab : MonoBehaviour
         // Gera botões dinamicamente para cada prefab na lista
         for (int i = 0; i < Prefabs.Count; i++)
         {
+            //AddFurnitureBehaviour(Prefabs[i]); // Adiciona o comportamento de mobília ao prefab
             Debug.Log($"Criando botão para {Prefabs[i].name}"); // Loga o nome do prefab
 
             GameObject button = Instantiate(buttonPrefab, Container.transform, false); // Instancia botão corretamente
@@ -50,8 +52,34 @@ public class InstantiatePrefab : MonoBehaviour
         }
     }
 
+    void AddFurnitureBehaviour(GameObject prefab)
+    {
+        var child = prefab.transform.GetChild(0).gameObject;
+
+        var transformer = child.AddComponent<GrabFreeTransformer>();
+        transformer.gridSize = gridSize;
+        transformer.rayInteractor = rayInteractor;
+        transformer.rayStart = rayStart;
+
+        var grabable = child.GetComponent<Grabbable>();
+
+        grabable.InjectOptionalOneGrabTransformer(transformer);
+
+        GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        marker.GetComponent<Collider>().enabled = false;
+        Material mat = Resources.Load<Material>("Materials/Blue Glow");
+        marker.GetComponent<Renderer>().material = mat;
+        transformer.marker = marker;
+    }
+
     private bool canClick = true;
     private float clickCooldown = 0.1f;
+    public float gridSize = 1.0f;
+    public RayInteractor rayInteractor;
+    public GameObject marker;
+    public float rayStart = 1.0f;
+
+
 
     void InstantiateObject(GameObject prefab)
     {

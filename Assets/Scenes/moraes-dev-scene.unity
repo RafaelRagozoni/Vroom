@@ -519,7 +519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSize: 1
-  rayStart: 1
+  rayStart: 0.1
   rayOrigin: {fileID: 667238777}
   rayInteractor: {fileID: 1536300491}
   marker: {fileID: 1614120272}

@@ -200,6 +200,13 @@ GameObject:
   - component: {fileID: 4580347822016672158}
   - component: {fileID: 2563263774979417260}
   - component: {fileID: 3439769511698060557}
+  - component: {fileID: 4236710544086602649}
+  - component: {fileID: 8356582350604677023}
+  - component: {fileID: 3184367839732877814}
+  - component: {fileID: 6864973200255217068}
+  - component: {fileID: 9177362961051633486}
+  - component: {fileID: 1691497916596841495}
+  - component: {fileID: 6036309519212036548}
   m_Layer: 0
   m_Name: Bulb_01
   m_TagString: Untagged
@@ -275,6 +282,125 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4236710544086602649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6655789391885285396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridSize: 1
+  rayStart: 1
+  rayOrigin: {fileID: 0}
+  rayInteractor: {fileID: 0}
+  marker: {fileID: 0}
+--- !u!114 &8356582350604677023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6655789391885285396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridSize: 1
+  rayStart: 1
+  rayOrigin: {fileID: 0}
+  rayInteractor: {fileID: 0}
+  marker: {fileID: 0}
+--- !u!114 &3184367839732877814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6655789391885285396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridSize: 1
+  rayStart: 1
+  rayOrigin: {fileID: 0}
+  rayInteractor: {fileID: 0}
+  marker: {fileID: 0}
+--- !u!114 &6864973200255217068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6655789391885285396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridSize: 1
+  rayStart: 1
+  rayOrigin: {fileID: 0}
+  rayInteractor: {fileID: 0}
+  marker: {fileID: 0}
+--- !u!114 &9177362961051633486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6655789391885285396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridSize: 1
+  rayStart: 1
+  rayOrigin: {fileID: 0}
+  rayInteractor: {fileID: 0}
+  marker: {fileID: 0}
+--- !u!114 &1691497916596841495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6655789391885285396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridSize: 1
+  rayStart: 1
+  rayOrigin: {fileID: 0}
+  rayInteractor: {fileID: 0}
+  marker: {fileID: 0}
+--- !u!114 &6036309519212036548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6655789391885285396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridSize: 1
+  rayStart: 1
+  rayOrigin: {fileID: 0}
+  rayInteractor: {fileID: 0}
+  marker: {fileID: 0}
 --- !u!1 &8932203136470199698
 GameObject:
   m_ObjectHideFlags: 0
