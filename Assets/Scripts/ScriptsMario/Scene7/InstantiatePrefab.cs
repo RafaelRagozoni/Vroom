@@ -54,7 +54,7 @@ public class InstantiatePrefab : MonoBehaviour
 
     void AddFurnitureBehaviour(GameObject prefab)
     {
-        var child = prefab.transform.GetChild(0).gameObject;
+        var child = prefab.transform.Find("ISDK_RayGrabInteraction").gameObject;
 
         var transformer = child.AddComponent<GrabFreeTransformer>();
         transformer.gridSize = gridSize;
@@ -65,7 +65,9 @@ public class InstantiatePrefab : MonoBehaviour
 
         grabable.InjectOptionalOneGrabTransformer(transformer);
 
-        GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        marker.transform.SetParent(prefab.transform);
+        marker.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
         marker.GetComponent<Collider>().enabled = false;
         Material mat = Resources.Load<Material>("Materials/Blue Glow");
         marker.GetComponent<Renderer>().material = mat;
@@ -91,10 +93,11 @@ public class InstantiatePrefab : MonoBehaviour
         Debug.Log("Clique detectado!");
 
         Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
-        Quaternion rotation = Quaternion.LookRotation(sceneCamera.transform.forward, Vector3.up);
-        rotation *= Quaternion.Euler(0, 90, 0); // Ajusta rotação
-
-        Instantiate(prefab, position, rotation);
+        //Quaternion rotation = Quaternion.LookRotation(sceneCamera.transform.forward, Vector3.up);
+        //rotation *= Quaternion.Euler(0, 90, 0); // Ajusta rotação
+        var rotation = Quaternion.identity; // Mantém a rotação original
+        var Object=Instantiate(prefab, position, rotation);
+        AddFurnitureBehaviour(Object);
     }
 
     void ResetClick()

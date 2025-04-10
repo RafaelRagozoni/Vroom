@@ -30,7 +30,10 @@ public class ObjectClickHandler : MonoBehaviour
             Debug.LogError("RayInteractable não encontrado!");
         }
     }
-
+    //private void OnClick()
+    //{
+    //    ObjectEditorUI.Instance.CloseEditor();
+    //}
     private void OnClick()
     {
         i = i + 1;

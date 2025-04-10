@@ -46,20 +46,28 @@ public class ObjectDoubleClick : MonoBehaviour
 
     private void OnDoubleClick()
     {
-        Debug.Log("Duplo clique detectado!");
-
-        if (parentRenderer != null && parentRenderer.materials.Length > 0)
-        {
-            // Alterna entre vermelho e azul, por exemplo
-            Color currentColor = parentRenderer.materials[0].color;
-            if (currentColor == Color.red)
-            {
-                parentRenderer.materials[0].color = Color.blue;
-            }
-            else
-            {
-                parentRenderer.materials[0].color = Color.red;
-            }
-        }
+        Debug.Log("Antes: " + transform.parent.position);
+        ObjectEditorUI.Instance.OpenEditor(transform.parent.gameObject);
+        Debug.Log("Depois: " + transform.parent.position);
     }
+
+
+    //private void OnDoubleClick()
+    //{
+    //    Debug.Log("Duplo clique detectado!");
+
+    //    if (parentRenderer != null && parentRenderer.materials.Length > 0)
+    //    {
+    //        // Alterna entre vermelho e azul, por exemplo
+    //        Color currentColor = parentRenderer.materials[0].color;
+    //        if (currentColor == Color.red)
+    //        {
+    //            parentRenderer.materials[0].color = Color.blue;
+    //        }
+    //        else
+    //        {
+    //            parentRenderer.materials[0].color = Color.red;
+    //        }
+    //    }
+    //}
 }
