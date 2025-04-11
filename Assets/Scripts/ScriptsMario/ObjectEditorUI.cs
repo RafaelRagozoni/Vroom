@@ -23,33 +23,65 @@ public class ObjectEditorUI : MonoBehaviour
         scaleSlider.onValueChanged.AddListener(OnScaleChanged);
     }
 
+    //public void OpenEditor(GameObject target)
+    //{
+    //    Debug.Log("OpenEditor chamado por: " + target.name);
+
+    //    currentTarget = target;
+    //    originalScale = target.transform.localScale;
+
+    //    ignoreSliderChange = true;
+
+    //    // Calcula o valor atual do slider com base na escala atual
+    //    float currentMultiplier = target.transform.localScale.x / originalScale.x;
+
+    //    scaleSlider.value = currentMultiplier;
+
+    //    canvas.SetActive(true);
+    //    ignoreSliderChange = false;
+    //}
+
     public void OpenEditor(GameObject target)
     {
         Debug.Log("OpenEditor chamado por: " + target.name);
 
         currentTarget = target;
-        originalScale = target.transform.localScale;
+        originalScale = Vector3.one; // Assume que 1 é o valor "neutro" da escala
+                                     // (ou pode salvar em outro momento, se preferir)
 
         ignoreSliderChange = true;
 
-        // Calcula o valor atual do slider com base na escala atual
-        float currentMultiplier = target.transform.localScale.x / originalScale.x;
+        // Define o valor do slider com base na escala atual do objeto (eixo X, por exemplo)
+        float currentScale = target.transform.localScale.x;
 
-        scaleSlider.value = currentMultiplier;
+        // Interpola o valor do slider com base na faixa [0.5, 2.0]
+        float sliderValue = Mathf.InverseLerp(0.5f, 2f, currentScale);
+        scaleSlider.value = Mathf.Lerp(scaleSlider.minValue, scaleSlider.maxValue, sliderValue);
 
         canvas.SetActive(true);
         ignoreSliderChange = false;
     }
 
 
+    //public void OnScaleChanged(float value)
+    //{
+    //    if (ignoreSliderChange || currentTarget == null) return;
+
+    //    float safeValue = Mathf.Max(value, 0.1f); // Evita escala zero
+    //    currentTarget.transform.localScale = originalScale * safeValue;
+
+    //    Debug.Log($"Escala alterada para: {originalScale * safeValue}");
+    //}
+
     public void OnScaleChanged(float value)
     {
         if (ignoreSliderChange || currentTarget == null) return;
 
-        float safeValue = Mathf.Max(value, 0.1f); // Evita escala zero
-        currentTarget.transform.localScale = originalScale * safeValue;
+        // Aqui o valor do slider já é o multiplicador direto
+        float scale = Mathf.Clamp(value, 0.5f, 2f);
+        currentTarget.transform.localScale = Vector3.one * scale;
 
-        Debug.Log($"Escala alterada para: {originalScale * safeValue}");
+        Debug.Log($"Escala alterada para: {currentTarget.transform.localScale}");
     }
 
     public void CloseEditor()

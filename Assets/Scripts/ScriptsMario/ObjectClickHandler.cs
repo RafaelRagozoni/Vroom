@@ -30,29 +30,29 @@ public class ObjectClickHandler : MonoBehaviour
             Debug.LogError("RayInteractable não encontrado!");
         }
     }
-    //private void OnClick()
-    //{
-    //    ObjectEditorUI.Instance.CloseEditor();
-    //}
     private void OnClick()
     {
-        i = i + 1;
-        i = i % 2;
-        // Verifica se o objeto pai tem materiais e altera a cor do primeiro material
-        if (parentRenderer != null && parentRenderer.materials.Length > 0)
-        {
-            if (i == 0)
-            {
-                parentRenderer.materials[0].color = Color.red; // Muda a cor do primeiro material
-            }
-            if (i == 1)
-            {
-                parentRenderer.materials[0].color = Color.blue;
-            }
-        }
-        else
-        {
-            Debug.LogWarning("O objeto pai não tem materiais ou o Renderer não foi encontrado!");
-        }
+        ObjectEditorUI.Instance.CloseEditor();
     }
+    //private void OnClick()
+    //{
+    //    i = i + 1;
+    //    i = i % 2;
+    //    // Verifica se o objeto pai tem materiais e altera a cor do primeiro material
+    //    if (parentRenderer != null && parentRenderer.materials.Length > 0)
+    //    {
+    //        if (i == 0)
+    //        {
+    //            parentRenderer.materials[0].color = Color.red; // Muda a cor do primeiro material
+    //        }
+    //        if (i == 1)
+    //        {
+    //            parentRenderer.materials[0].color = Color.blue;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("O objeto pai não tem materiais ou o Renderer não foi encontrado!");
+    //    }
+    //}
 }

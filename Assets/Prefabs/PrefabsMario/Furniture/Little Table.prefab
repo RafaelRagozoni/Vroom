@@ -13,9 +13,6 @@ GameObject:
   - component: {fileID: 7149765037871353821}
   - component: {fileID: 8508279824599475250}
   - component: {fileID: 6468859337580414729}
-  - component: {fileID: 2004324402402392302}
-  - component: {fileID: 4253348334291292916}
-  - component: {fileID: -8503979781146499343}
   m_Layer: 0
   m_Name: ISDK_RayGrabInteraction
   m_TagString: Untagged
@@ -53,7 +50,7 @@ MonoBehaviour:
   _transferOnSecondSelection: 1
   _addNewPointsToFront: 0
   _forwardElement: {fileID: 0}
-  _oneGrabTransformer: {fileID: -8503979781146499343}
+  _oneGrabTransformer: {fileID: 0}
   _twoGrabTransformer: {fileID: 0}
   _targetTransform: {fileID: 6344109126681105788}
   _maxGrabPoints: -1
@@ -106,52 +103,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collider: {fileID: 280679367648827989}
---- !u!114 &2004324402402392302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2494197767802168706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83e11e107452fa548a4c7f527246806d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4253348334291292916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2494197767802168706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &-8503979781146499343
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2494197767802168706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
 --- !u!1 &6308256345737797631
 GameObject:
   m_ObjectHideFlags: 0
