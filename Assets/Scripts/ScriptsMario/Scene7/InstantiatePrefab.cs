@@ -58,7 +58,7 @@ public class InstantiatePrefab : MonoBehaviour
 
         var transformer = child.AddComponent<GrabFreeTransformer>();
         transformer.gridSize = gridSize;
-        transformer.rayInteractor = rayInteractor;
+        transformer.righHandInteractor = rayInteractor;
         transformer.rayStart = rayStart;
 
         var grabable = child.GetComponent<Grabbable>();

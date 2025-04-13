@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Oculus.Interaction
 {
@@ -16,11 +17,13 @@ namespace Oculus.Interaction
         public float gridSize = 1.0f;
         public float rayStart = 1.0f;
         public Transform rayOrigin;
-        public RayInteractor rayInteractor;
+        public RayInteractor righHandInteractor;
+        public RayInteractor leftHandInteractor;
         public GameObject marker;
 
         private IGrabbable _grabbable;
         private Pose _grabDeltaInLocalSpace;
+        private float _initialrightHandRotation;
 
         private Quaternion _lastRotation = Quaternion.identity;
 
@@ -97,6 +100,8 @@ namespace Oculus.Interaction
                 targetTransform.rotation);
             _lastRotation = Quaternion.identity;
 
+            _initialrightHandRotation = righHandInteractor.Rotation.eulerAngles.z;
+
             marker.GetComponent<Renderer>().enabled = true;
         }
 
@@ -121,31 +126,58 @@ namespace Oculus.Interaction
             //// Lock rotation
             //targetTransform.rotation = Quaternion.Euler(0, 0, 0);
 
-            var collider = targetTransform.GetComponentInParent<Collider>();
+            Debug.Log("Rotation: " + righHandInteractor.Rotation.eulerAngles.z);
 
-            SnapToRayIntersection(targetTransform);
+            targetTransform.localRotation = Quaternion.Euler(0.0f, 4*(_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z), 0.0f);
 
-            SnapGrabableToGround(targetTransform, collider);
+            //if (!IsRotationMode())
+            //{
+                var collider = targetTransform.GetComponentInParent<Collider>();
 
-            SnapGrabableToGrid(marker.transform);
-            SnapGrabableToGround(marker.transform, collider);
+                SnapToRayIntersection(targetTransform);
+
+                SnapGrabableToGround(targetTransform, collider);
+
+                SnapGrabableToGrid(marker.transform);
+
+                collider.enabled = false;
+                var markerCollider = marker.GetComponentInParent<Collider>();
+                SnapGrabableToGround(marker.transform, markerCollider);
+                collider.enabled = true;
+            //}
+            //else
+            //{
+            //    Debug.Log("ROTATION MODE");
+            //}
+        }
+
+        private bool IsRotationMode()
+        {
+            if (leftHandInteractor.HasSelectedInteractable)
+            {
+
+                if (leftHandInteractor.SelectedInteractable == righHandInteractor.SelectedInteractable)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void SnapToRayIntersection(Transform targetTransform)
         {
             var collider = targetTransform.GetComponentInParent<Collider>();
             collider.enabled = false;
-            var ray = rayInteractor.Ray;
+            var ray = righHandInteractor.Ray;
 
             ray.origin = ray.origin + rayStart * ray.direction;
 
-            Debug.Log(rayInteractor.Ray);
-            if(Physics.Raycast(ray, out var hitInfo))
+            if (Physics.Raycast(ray, out var hitInfo))
             {
                 targetTransform.position = hitInfo.point;
             }
             collider.enabled = true;
-
         }
 
         private void SnapGrabableToGrid(Transform targetTransform)
@@ -166,16 +198,17 @@ namespace Oculus.Interaction
 
             var extents = collider.bounds.extents;
 
+            var isEnabled = collider.enabled;
             collider.enabled = false;
 
             if (Physics.BoxCast(rayOrigin, extents, rayDirection, out var hitInfo))
             {
-                collider.enabled = true;
+                collider.enabled = isEnabled;
                 targetTransform.position = new Vector3(targetTransform.position.x, hitInfo.point.y + collider.bounds.size.y / 2.0f, targetTransform.position.z);
             }
             else
             {
-                collider.enabled = true;
+                collider.enabled = isEnabled;
             }
         }
 
