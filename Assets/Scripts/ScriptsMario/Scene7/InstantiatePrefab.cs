@@ -63,7 +63,7 @@ public class InstantiatePrefab : MonoBehaviour
 
         }
         transformer.gridSize = gridSize;
-        transformer.rayInteractor = rayInteractor;
+        transformer.righHandInteractor = rayInteractor;
         transformer.rayStart = rayStart;
 
         if (child.GetComponent<ObjectClickManager>() == null)
@@ -75,13 +75,14 @@ public class InstantiatePrefab : MonoBehaviour
 
         grabable.InjectOptionalOneGrabTransformer(transformer);
 
-        GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        marker.transform.SetParent(prefab.transform);
-        marker.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-        marker.GetComponent<Collider>().enabled = false;
-        Material mat = Resources.Load<Material>("Materials/Blue Glow");
-        marker.GetComponent<Renderer>().material = mat;
-        transformer.marker = marker;
+        GameObject markerObj = Instantiate(marker);
+        markerObj.transform.SetParent(prefab.transform);
+        markerObj.transform.localPosition = Vector3.zero;
+        //markerObj.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+        markerObj.GetComponent<Collider>().enabled = false;
+        //Material mat = Resources.Load<Material>("Assets/Materials/Blue Glow.mat");
+        //markerObj.GetComponent<Renderer>().material = mat;
+        transformer.marker = markerObj;
     }
 
     private bool canClick = true;
