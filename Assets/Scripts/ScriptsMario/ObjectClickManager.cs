@@ -60,9 +60,32 @@ public class ObjectClickManager : MonoBehaviour
         }
     }
 
+    //private void TriggerDoubleClick()
+    //{
+    //    Debug.Log("Duplo clique detectado!");
+    //    ObjectEditorUI.Instance.OpenEditor(transform.parent.gameObject);
+    //}
+
     private void TriggerDoubleClick()
     {
         Debug.Log("Duplo clique detectado!");
-        ObjectEditorUI.Instance.OpenEditor(transform.parent.gameObject);
+
+        Transform target = transform.parent;
+
+        // Tenta obter a altura do objeto via Collider
+        Collider collider = target.GetComponent<Collider>();
+        if (collider != null)
+        {
+            float altura = collider.bounds.size.y;
+            Vector3 posicaoUI = target.position + new Vector3(0, altura + 0.1f, 0);
+            ObjectEditorUI.Instance.OpenEditor(target.gameObject, posicaoUI);
+        }
+        else
+        {
+            Debug.LogWarning("Nenhum Collider encontrado para calcular a altura.");
+            Vector3 fallbackPosition = target.position + new Vector3(0, 0.5f, 0);
+            ObjectEditorUI.Instance.OpenEditor(target.gameObject, fallbackPosition);
+        }
     }
+
 }
