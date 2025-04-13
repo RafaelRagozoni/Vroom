@@ -6201,7 +6201,7 @@ MonoBehaviour:
   buttonPrefab: {fileID: 1322792966197267494, guid: b7bc56661560b5d4782875c65baf4e60, type: 3}
   gridSize: 1
   rayInteractor: {fileID: 1310671784}
-  marker: {fileID: 0}
+  marker: {fileID: 8662668342224123496, guid: 7af704baf6cb8ce42bd8ec3639379717, type: 3}
   rayStart: 1
 --- !u!114 &476606087
 MonoBehaviour:
@@ -6232,7 +6232,8 @@ MonoBehaviour:
   gridSize: 1
   rayStart: 1
   rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
+  righHandInteractor: {fileID: 0}
+  leftHandInteractor: {fileID: 0}
   marker: {fileID: 0}
 --- !u!1 &476814086
 GameObject:
