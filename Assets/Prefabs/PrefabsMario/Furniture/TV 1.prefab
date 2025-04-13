@@ -99,13 +99,6 @@ GameObject:
   - component: {fileID: 1109805397150287955}
   - component: {fileID: 8215073781460898335}
   - component: {fileID: 744274394619205207}
-  - component: {fileID: 5907022468106076262}
-  - component: {fileID: -2836479923674920529}
-  - component: {fileID: -4627001556279851423}
-  - component: {fileID: -3287786410827018724}
-  - component: {fileID: 9090011298089433635}
-  - component: {fileID: -8916066894066334949}
-  - component: {fileID: -6008307107519150724}
   m_Layer: 0
   m_Name: ISDK_RayGrabInteraction
   m_TagString: Untagged
@@ -143,7 +136,7 @@ MonoBehaviour:
   _transferOnSecondSelection: 1
   _addNewPointsToFront: 0
   _forwardElement: {fileID: 0}
-  _oneGrabTransformer: {fileID: -6008307107519150724}
+  _oneGrabTransformer: {fileID: 0}
   _twoGrabTransformer: {fileID: 0}
   _targetTransform: {fileID: 2310671298593639265}
   _maxGrabPoints: -1
@@ -196,120 +189,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collider: {fileID: 9002409509349832512}
---- !u!114 &5907022468106076262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552164503775630898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83e11e107452fa548a4c7f527246806d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-2836479923674920529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552164503775630898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &-4627001556279851423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552164503775630898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &-3287786410827018724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552164503775630898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &9090011298089433635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552164503775630898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &-8916066894066334949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552164503775630898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &-6008307107519150724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552164503775630898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
 --- !u!1 &787162045550230016
 GameObject:
   m_ObjectHideFlags: 0

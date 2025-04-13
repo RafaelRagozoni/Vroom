@@ -56,10 +56,20 @@ public class InstantiatePrefab : MonoBehaviour
     {
         var child = prefab.transform.Find("ISDK_RayGrabInteraction").gameObject;
 
-        var transformer = child.AddComponent<GrabFreeTransformer>();
+        var transformer = child.GetComponent<GrabFreeTransformer>();
+        if (transformer == null)
+        {
+            transformer = child.AddComponent<GrabFreeTransformer>();
+
+        }
         transformer.gridSize = gridSize;
         transformer.righHandInteractor = rayInteractor;
         transformer.rayStart = rayStart;
+
+        if (child.GetComponent<ObjectClickManager>() == null)
+        {
+            var clickHandler = child.AddComponent<ObjectClickManager>();
+        }
 
         var grabable = child.GetComponent<Grabbable>();
 

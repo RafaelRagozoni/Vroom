@@ -13,13 +13,6 @@ GameObject:
   - component: {fileID: 1419249100296435152}
   - component: {fileID: 9007349101683390635}
   - component: {fileID: 8577404547832937593}
-  - component: {fileID: 2770297674438142838}
-  - component: {fileID: 1101212259315013963}
-  - component: {fileID: 8574919710250916176}
-  - component: {fileID: 7313195777878919549}
-  - component: {fileID: 5559317267868489883}
-  - component: {fileID: -2290343069346082013}
-  - component: {fileID: 6170982441638453763}
   m_Layer: 0
   m_Name: ISDK_RayGrabInteraction
   m_TagString: Untagged
@@ -57,7 +50,7 @@ MonoBehaviour:
   _transferOnSecondSelection: 1
   _addNewPointsToFront: 0
   _forwardElement: {fileID: 0}
-  _oneGrabTransformer: {fileID: 6170982441638453763}
+  _oneGrabTransformer: {fileID: 0}
   _twoGrabTransformer: {fileID: 0}
   _targetTransform: {fileID: 8875715647272089050}
   _maxGrabPoints: -1
@@ -110,120 +103,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collider: {fileID: 467672478523713727}
---- !u!114 &2770297674438142838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1360056640817779087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83e11e107452fa548a4c7f527246806d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1101212259315013963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1360056640817779087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &8574919710250916176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1360056640817779087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &7313195777878919549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1360056640817779087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &5559317267868489883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1360056640817779087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &-2290343069346082013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1360056640817779087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
---- !u!114 &6170982441638453763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1360056640817779087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridSize: 1
-  rayStart: 1
-  rayOrigin: {fileID: 0}
-  rayInteractor: {fileID: 0}
-  marker: {fileID: 0}
 --- !u!1 &6487583126012684947
 GameObject:
   m_ObjectHideFlags: 0

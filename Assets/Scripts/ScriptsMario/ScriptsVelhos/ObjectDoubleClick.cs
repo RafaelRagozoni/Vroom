@@ -35,7 +35,7 @@ public class ObjectDoubleClick : MonoBehaviour
 
         if (currentTime - lastClickTime <= doubleClickThreshold)
         {
-            OnDoubleClick();
+            //OnDoubleClick();
             lastClickTime = 0f; // reseta para evitar múltiplos duplos cliques em sequência
         }
         else
@@ -44,12 +44,12 @@ public class ObjectDoubleClick : MonoBehaviour
         }
     }
 
-    private void OnDoubleClick()
-    {
-        Debug.Log("Antes: " + transform.parent.position);
-        ObjectEditorUI.Instance.OpenEditor(transform.parent.gameObject);
-        Debug.Log("Depois: " + transform.parent.position);
-    }
+    //private void OnDoubleClick()
+    //{
+    //    Debug.Log("Antes: " + transform.parent.position);
+    //    ObjectEditorUI.Instance.OpenEditor(transform.parent.gameObject);
+    //    Debug.Log("Depois: " + transform.parent.position);
+    //}
 
 
     //private void OnDoubleClick()
