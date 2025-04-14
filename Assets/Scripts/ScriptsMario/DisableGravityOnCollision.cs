@@ -15,12 +15,13 @@ public class DisableGravityOnCollision : MonoBehaviour
         // Aqui você pode checar se bateu especificamente no chão, se quiser
         // if (collision.gameObject.CompareTag("Chao")) { ... }
 
-        rb.useGravity = false;
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.isKinematic = true; // congela no lugar
-                               // Se não quiser congelar, remova essa linha
-                               // Reativa o script de grab (se necessário)
+        //rb.useGravity = false;
+        //rb.linearVelocity = Vector3.zero;
+        //rb.angularVelocity = Vector3.zero;
+        //rb.isKinematic = true; // congela no lugar
+        //                       // Se não quiser congelar, remova essa linha
+        //                       // Reativa o script de grab (se necessário)
+        //rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
 
         var child = this.transform.Find("ISDK_RayGrabInteraction");
         if (child != null)

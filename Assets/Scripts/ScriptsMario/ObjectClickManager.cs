@@ -8,8 +8,11 @@ public class ObjectClickManager : MonoBehaviour
     private float clickThreshold = 0.3f; // Tempo entre cliques para considerar duplo clique
     private bool oneClickPending = false;
 
+    private Grabbable grabbable;
+
     private void Start()
     {
+        grabbable = GetComponent<Grabbable>();
         parentRenderer = transform.parent.GetComponent<Renderer>();
 
         RayInteractable interactable = GetComponent<RayInteractable>();

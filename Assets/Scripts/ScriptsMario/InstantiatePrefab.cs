@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 using Oculus.Interaction;
+using Unity.VisualScripting;
 
 public class InstantiatePrefab : MonoBehaviour
 {
@@ -66,8 +67,6 @@ public class InstantiatePrefab : MonoBehaviour
         transformer.righHandInteractor = rayInteractor;
         transformer.rayStart = rayStart;
         
-        
-
         if (child.GetComponent<ObjectClickManager>() == null)
         {
             var clickHandler = child.AddComponent<ObjectClickManager>();
@@ -134,7 +133,7 @@ public class InstantiatePrefab : MonoBehaviour
 
         // Ativa a gravidade
         rb.useGravity = true;
-
+        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
         // Desmarca o IsTrigger do Collider (caso o prefab tenha um)
         Collider collider = obj.GetComponent<Collider>();
         if (collider != null)
@@ -143,15 +142,15 @@ public class InstantiatePrefab : MonoBehaviour
         }
 
         // Adiciona o script que desativa a gravidade após colisão
-        obj.AddComponent<DisableGravityOnCollision>();
+        //obj.AddComponent<DisableGravityOnCollision>();
 
         AddFurnitureBehaviour(obj);
 
-        var child = obj.transform.Find("ISDK_RayGrabInteraction");
-        if (child != null)
-        {
-            child.gameObject.SetActive(false);
-        }
+        //var child = obj.transform.Find("ISDK_RayGrabInteraction");
+        //if (child != null)
+        //{
+        //    child.gameObject.SetActive(false);
+        //}
 
     }
 
