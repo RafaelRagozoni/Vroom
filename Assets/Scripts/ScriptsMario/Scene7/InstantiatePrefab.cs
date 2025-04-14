@@ -65,6 +65,8 @@ public class InstantiatePrefab : MonoBehaviour
         transformer.gridSize = gridSize;
         transformer.righHandInteractor = rayInteractor;
         transformer.rayStart = rayStart;
+        
+        
 
         if (child.GetComponent<ObjectClickManager>() == null)
         {
@@ -92,23 +94,65 @@ public class InstantiatePrefab : MonoBehaviour
     public GameObject marker;
     public float rayStart = 1.0f;
 
+    //void InstantiateObject(GameObject prefab)
+    //{
+    //    if (!canClick) return; // Se o clique já foi registrado, ignora.
 
+    //    canClick = false; // Bloqueia cliques adicionais por um curto tempo.
+    //    Invoke(nameof(ResetClick), clickCooldown); // Reativa o clique após cooldown.
+
+    //    Debug.Log("Clique detectado!");
+
+    //    Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
+    //    //Quaternion rotation = Quaternion.LookRotation(sceneCamera.transform.forward, Vector3.up);
+    //    //rotation *= Quaternion.Euler(0, 90, 0); // Ajusta rotação
+    //    var rotation = Quaternion.identity; // Mantém a rotação original
+    //    var Object=Instantiate(prefab, position, rotation);
+    //    AddFurnitureBehaviour(Object);
+    //}
 
     void InstantiateObject(GameObject prefab)
     {
-        if (!canClick) return; // Se o clique já foi registrado, ignora.
+        if (!canClick) return;
 
-        canClick = false; // Bloqueia cliques adicionais por um curto tempo.
-        Invoke(nameof(ResetClick), clickCooldown); // Reativa o clique após cooldown.
+        canClick = false;
+        Invoke(nameof(ResetClick), clickCooldown);
 
         Debug.Log("Clique detectado!");
 
         Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
-        //Quaternion rotation = Quaternion.LookRotation(sceneCamera.transform.forward, Vector3.up);
-        //rotation *= Quaternion.Euler(0, 90, 0); // Ajusta rotação
-        var rotation = Quaternion.identity; // Mantém a rotação original
-        var Object=Instantiate(prefab, position, rotation);
-        AddFurnitureBehaviour(Object);
+        Quaternion rotation = Quaternion.identity;
+        var obj = Instantiate(prefab, position, rotation);
+
+        // Adiciona Rigidbody se não tiver
+        if (!obj.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb = obj.AddComponent<Rigidbody>();
+        }
+        // Desativa o isKinematic para garantir que a física vai funcionar
+        rb.isKinematic = false;
+
+        // Ativa a gravidade
+        rb.useGravity = true;
+
+        // Desmarca o IsTrigger do Collider (caso o prefab tenha um)
+        Collider collider = obj.GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.isTrigger = false; // Desativa o "Is Trigger"
+        }
+
+        // Adiciona o script que desativa a gravidade após colisão
+        obj.AddComponent<DisableGravityOnCollision>();
+
+        AddFurnitureBehaviour(obj);
+
+        var child = obj.transform.Find("ISDK_RayGrabInteraction");
+        if (child != null)
+        {
+            child.gameObject.SetActive(false);
+        }
+
     }
 
     void ResetClick()

@@ -60,12 +60,6 @@ public class ObjectClickManager : MonoBehaviour
         }
     }
 
-    //private void TriggerDoubleClick()
-    //{
-    //    Debug.Log("Duplo clique detectado!");
-    //    ObjectEditorUI.Instance.OpenEditor(transform.parent.gameObject);
-    //}
-
     private void TriggerDoubleClick()
     {
         Debug.Log("Duplo clique detectado!");
