@@ -24,6 +24,8 @@ namespace Oculus.Interaction
         private IGrabbable _grabbable;
         private Pose _grabDeltaInLocalSpace;
         private float _initialrightHandRotation;
+        private Vector3? _initialRayHitPoint;
+        private Vector3 _initialObjectPosition;
 
         private Quaternion _lastRotation = Quaternion.identity;
 
@@ -100,7 +102,12 @@ namespace Oculus.Interaction
                 targetTransform.rotation);
             _lastRotation = Quaternion.identity;
 
+            _initialObjectPosition = targetTransform.position;
             _initialrightHandRotation = righHandInteractor.Rotation.eulerAngles.z;
+
+
+            var collider = targetTransform.GetComponentInParent<Collider>();
+            _initialRayHitPoint = GetInteractorRayHitPosition(righHandInteractor.Ray, collider);
 
             marker.GetComponent<Renderer>().enabled = true;
         }
@@ -114,73 +121,89 @@ namespace Oculus.Interaction
             int count = _grabbable.GrabPoints.Count;
             Transform targetTransform = _grabbable.Transform;
 
-            //Vector3 localPosition = UpdateTransformerPointData(_grabbable.GrabPoints, ref _deltas);
+            RotateTransformWithInteractor(targetTransform);
 
-            //_lastRotation = UpdateRotation(count, _deltas) * _lastRotation;
-            //Quaternion rotation = _lastRotation * _grabDeltaInLocalSpace.rotation;
-            //targetTransform.rotation = rotation;
+            var targetCollider = targetTransform.GetComponentInParent<Collider>();
 
-            //Vector3 position = localPosition - targetTransform.TransformVector(_grabDeltaInLocalSpace.position);
-            //targetTransform.position = position;
+            SnapToRayIntersection(targetTransform);
 
-            //// Lock rotation
-            //targetTransform.rotation = Quaternion.Euler(0, 0, 0);
+            SnapTransformToGround(targetTransform, targetCollider);
 
-            Debug.Log("Rotation: " + righHandInteractor.Rotation.eulerAngles.z);
+            SnapTransformToGrid(marker.transform);
 
-            targetTransform.localRotation = Quaternion.Euler(0.0f, 4*(_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z), 0.0f);
-
-            //if (!IsRotationMode())
-            //{
-                var collider = targetTransform.GetComponentInParent<Collider>();
-
-                SnapToRayIntersection(targetTransform);
-
-                SnapGrabableToGround(targetTransform, collider);
-
-                SnapGrabableToGrid(marker.transform);
-
-                collider.enabled = false;
-                var markerCollider = marker.GetComponentInParent<Collider>();
-                SnapGrabableToGround(marker.transform, markerCollider);
-                collider.enabled = true;
-            //}
-            //else
-            //{
-            //    Debug.Log("ROTATION MODE");
-            //}
+            targetCollider.enabled = false;
+            var markerCollider = marker.GetComponentInParent<Collider>();
+            SnapTransformToGround(marker.transform, markerCollider);
+            targetCollider.enabled = true;
         }
 
-        private bool IsRotationMode()
+        private void RotateTransformWithInteractor(Transform targetTransform)
         {
-            if (leftHandInteractor.HasSelectedInteractable)
-            {
-
-                if (leftHandInteractor.SelectedInteractable == righHandInteractor.SelectedInteractable)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            var currentRotationY = targetTransform.localRotation.eulerAngles.y;
+            var newRotationY = currentRotationY + 4 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
+            targetTransform.localRotation = Quaternion.Euler(0.0f, newRotationY, 0.0f);
         }
 
         private void SnapToRayIntersection(Transform targetTransform)
         {
             var collider = targetTransform.GetComponentInParent<Collider>();
+
+            var interactorRay = righHandInteractor.Ray;
+            var hitPoint = GetInteractorRayHitPosition(interactorRay, collider);
+
+            if (hitPoint != null)
+            {
+                targetTransform.position = _initialObjectPosition + (hitPoint.Value - _initialRayHitPoint.Value);
+            }
+        }
+
+        /*
+        private void SnapToRayIntersection(Transform targetTransform)
+        {
+            var collider = targetTransform.GetComponentInParent<Collider>();
+
+            var interactorRay = righHandInteractor.Ray;
+            var hitPoint = GetInteractorRayHitPosition(interactorRay, collider);
+
+            if (hitPoint != null)
+            {
+
+                var hitToObjectPos = hitPoint - new Vector3(targetTransform.position.x, collider.bounds.min.y, targetTransform.position.z);
+
+                var finalVector = (hitPoint - interactorRay.origin) + hitToObjectPos;
+                var finalRay = new Ray(interactorRay.origin, finalVector.Value.normalized);
+
+                var finalHitPoint = GetInteractorRayHitPosition(finalRay, collider);
+
+                if (finalHitPoint != null)
+                {
+                    targetTransform.position = finalHitPoint.Value;
+                }
+            }
+        }
+        */
+
+        private Vector3? GetInteractorRayHitPosition(Ray ray, Collider collider)
+        {
+            var originalColliderState = collider.enabled;
+
             collider.enabled = false;
-            var ray = righHandInteractor.Ray;
 
             ray.origin = ray.origin + rayStart * ray.direction;
 
+            Vector3? hitPoint = null;
+
             if (Physics.Raycast(ray, out var hitInfo))
             {
-                targetTransform.position = hitInfo.point;
+                hitPoint = hitInfo.point;
             }
-            collider.enabled = true;
+
+            collider.enabled = originalColliderState;
+
+            return hitPoint;
         }
 
-        private void SnapGrabableToGrid(Transform targetTransform)
+        private void SnapTransformToGrid(Transform targetTransform)
         {
             targetTransform.position = new Vector3(snapToGrid(transform.position.x, gridSize), transform.position.y, snapToGrid(transform.position.z, gridSize));
         }
@@ -190,7 +213,7 @@ namespace Oculus.Interaction
             return (float)Math.Round(v / gridSize) * gridSize;
         }
 
-        private static void SnapGrabableToGround(Transform targetTransform, Collider collider)
+        private static void SnapTransformToGround(Transform targetTransform, Collider collider)
         {
 
             var rayOrigin = targetTransform.position + Vector3.up * 100.0f;
@@ -224,8 +247,8 @@ namespace Oculus.Interaction
 
             var collider = _grabbable.Transform.GetComponentInParent<Collider>();
             marker.GetComponent<Renderer>().enabled = false;
-            SnapGrabableToGrid(_grabbable.Transform);
-            SnapGrabableToGround(_grabbable.Transform, collider);
+            SnapTransformToGrid(_grabbable.Transform);
+            SnapTransformToGround(_grabbable.Transform, collider);
         }
 
         internal static void InitializeDeltas(int count, List<Pose> poses, ref GrabPointDelta[] deltas)
