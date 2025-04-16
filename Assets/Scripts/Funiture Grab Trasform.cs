@@ -151,7 +151,7 @@ namespace Oculus.Interaction
             var interactorRay = righHandInteractor.Ray;
             var hitPoint = GetInteractorRayHitPosition(interactorRay, collider);
 
-            if (hitPoint != null)
+            if (hitPoint != null && _initialRayHitPoint != null)
             {
                 targetTransform.position = _initialObjectPosition + (hitPoint.Value - _initialRayHitPoint.Value);
             }
