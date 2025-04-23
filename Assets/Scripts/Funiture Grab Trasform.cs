@@ -3,6 +3,8 @@ using System.Buffers;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using System.Collections;
+
 
 namespace Oculus.Interaction
 {
@@ -30,6 +32,11 @@ namespace Oculus.Interaction
         private Quaternion _lastRotation = Quaternion.identity;
 
         private GrabPointDelta[] _deltas;
+
+        // Controlling the time of the selection
+        private float _selectionStartTime;
+        public float requiredHoldTime = 0.4f; //minimum time to hold the object before moving it
+        private bool _canMove = false;
 
         internal struct GrabPointDelta
         {
@@ -88,6 +95,10 @@ namespace Oculus.Interaction
         /// </summary>
         public void BeginTransform()
         {
+            // Starts the time counts
+            _selectionStartTime = Time.time;
+            _canMove = false;
+
             int count = _grabbable.GrabPoints.Count;
 
             //rent space only while using
@@ -118,6 +129,18 @@ namespace Oculus.Interaction
         /// </summary>
         public void UpdateTransform()
         {
+            if (!_canMove)
+            {
+                if (Time.time - _selectionStartTime >= requiredHoldTime)
+                {
+                    _canMove = true;
+                }
+                else
+                {
+                    return; // ainda não pode mover
+                }
+            }
+
             int count = _grabbable.GrabPoints.Count;
             Transform targetTransform = _grabbable.Transform;
 
@@ -126,9 +149,7 @@ namespace Oculus.Interaction
             var targetCollider = targetTransform.GetComponentInParent<Collider>();
 
             SnapToRayIntersection(targetTransform);
-
             SnapTransformToGround(targetTransform, targetCollider);
-
             SnapTransformToGrid(marker.transform);
 
             targetCollider.enabled = false;
@@ -137,51 +158,41 @@ namespace Oculus.Interaction
             targetCollider.enabled = true;
         }
 
+
         private void RotateTransformWithInteractor(Transform targetTransform)
         {
-            var currentRotationY = targetTransform.localRotation.eulerAngles.y;
-            var newRotationY = currentRotationY + 4 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
+            //var currentRotationY = targetTransform.localRotation.eulerAngles.y;
+            //var newRotationY = currentRotationY + 4 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
+            var newRotationY= 2 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
             targetTransform.localRotation = Quaternion.Euler(0.0f, newRotationY, 0.0f);
         }
 
+        //private void SnapToRayIntersection(Transform targetTransform)
+        //{
+        //    var collider = targetTransform.GetComponentInParent<Collider>();
+
+        //    var interactorRay = righHandInteractor.Ray;
+        //    var hitPoint = GetInteractorRayHitPosition(interactorRay, collider);
+
+        //    if (hitPoint != null && _initialRayHitPoint != null)
+        //    {
+        //        targetTransform.position = _initialObjectPosition + (hitPoint.Value - _initialRayHitPoint.Value);
+        //    }
+        //}
+
         private void SnapToRayIntersection(Transform targetTransform)
         {
             var collider = targetTransform.GetComponentInParent<Collider>();
 
             var interactorRay = righHandInteractor.Ray;
-            var hitPoint = GetInteractorRayHitPosition(interactorRay, collider);
 
-            if (hitPoint != null && _initialRayHitPoint != null)
-            {
-                targetTransform.position = _initialObjectPosition + (hitPoint.Value - _initialRayHitPoint.Value);
-            }
-        }
-
-        /*
-        private void SnapToRayIntersection(Transform targetTransform)
-        {
-            var collider = targetTransform.GetComponentInParent<Collider>();
-
-            var interactorRay = righHandInteractor.Ray;
             var hitPoint = GetInteractorRayHitPosition(interactorRay, collider);
 
             if (hitPoint != null)
             {
-
-                var hitToObjectPos = hitPoint - new Vector3(targetTransform.position.x, collider.bounds.min.y, targetTransform.position.z);
-
-                var finalVector = (hitPoint - interactorRay.origin) + hitToObjectPos;
-                var finalRay = new Ray(interactorRay.origin, finalVector.Value.normalized);
-
-                var finalHitPoint = GetInteractorRayHitPosition(finalRay, collider);
-
-                if (finalHitPoint != null)
-                {
-                    targetTransform.position = finalHitPoint.Value;
-                }
+                targetTransform.position = hitPoint.Value;
             }
         }
-        */
 
         private Vector3? GetInteractorRayHitPosition(Ray ray, Collider collider)
         {

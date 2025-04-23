@@ -11,7 +11,7 @@ Library: C:\Users\mario\OneDrive\Documentos\UnityProjects\Vroom\Temp\BurstOutput
 --float-mode=Fast
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\mario\OneDrive\Documentos\UnityProjects\Vroom\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/6000.0.41f1/Editor/Data/PlaybackEngines/AndroidPlayer
+--key-folder=C:/Program Files/Unity/Hub/Editor/6000.0.45f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=C:\Users\mario\OneDrive\Documentos\UnityProjects\Vroom\Library\Burst
 --output=C:\Users\mario\OneDrive\Documentos\UnityProjects\Vroom\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
@@ -28,7 +28,7 @@ Library: C:\Users\mario\OneDrive\Documentos\UnityProjects\Vroom\Temp\BurstOutput
 --target-framework=NetFramework
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\mario\OneDrive\Documentos\UnityProjects\Vroom\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/6000.0.41f1/Editor/Data/PlaybackEngines/AndroidPlayer
+--key-folder=C:/Program Files/Unity/Hub/Editor/6000.0.45f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=C:\Users\mario\OneDrive\Documentos\UnityProjects\Vroom\Library\Burst
 --output=C:\Users\mario\OneDrive\Documentos\UnityProjects\Vroom\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/

@@ -11,6 +11,7 @@ public class ObjectEditorUI : MonoBehaviour
     private GameObject currentTarget;
     private Vector3 originalScale;
     private bool ignoreSliderChange = false;
+    public Transform cameraRig;
 
     void Awake()
     {
@@ -22,45 +23,6 @@ public class ObjectEditorUI : MonoBehaviour
         scaleSlider.maxValue = 2f;
         scaleSlider.onValueChanged.AddListener(OnScaleChanged);
     }
-
-    //public void OpenEditor(GameObject target)
-    //{
-    //    Debug.Log("OpenEditor chamado por: " + target.name);
-
-    //    currentTarget = target;
-    //    originalScale = target.transform.localScale;
-
-    //    ignoreSliderChange = true;
-
-    //    // Calcula o valor atual do slider com base na escala atual
-    //    float currentMultiplier = target.transform.localScale.x / originalScale.x;
-
-    //    scaleSlider.value = currentMultiplier;
-
-    //    canvas.SetActive(true);
-    //    ignoreSliderChange = false;
-    //}
-
-    //public void OpenEditor(GameObject target)
-    //{
-    //    Debug.Log("OpenEditor chamado por: " + target.name);
-
-    //    currentTarget = target;
-    //    originalScale = Vector3.one; // Assume que 1 é o valor "neutro" da escala
-    //                                 // (ou pode salvar em outro momento, se preferir)
-
-    //    ignoreSliderChange = true;
-
-    //    // Define o valor do slider com base na escala atual do objeto (eixo X, por exemplo)
-    //    float currentScale = target.transform.localScale.x;
-
-    //    // Interpola o valor do slider com base na faixa [0.5, 2.0]
-    //    float sliderValue = Mathf.InverseLerp(0.5f, 2f, currentScale);
-    //    scaleSlider.value = Mathf.Lerp(scaleSlider.minValue, scaleSlider.maxValue, sliderValue);
-
-    //    canvas.SetActive(true);
-    //    ignoreSliderChange = false;
-    //}
 
     public void OpenEditor(GameObject target, Vector3 position)
     {
@@ -78,19 +40,16 @@ public class ObjectEditorUI : MonoBehaviour
         // Define a posição do canvas
         canvas.transform.position = position;
 
+        // Faz o canvas olhar para a câmera
+        canvas.transform.LookAt(cameraRig);
+
+        // Corrige a rotação para não ficar de cabeça pra baixo
+        canvas.transform.rotation = Quaternion.LookRotation(canvas.transform.position - cameraRig.position);
+
         canvas.SetActive(true);
         ignoreSliderChange = false;
     }
 
-    //public void OnScaleChanged(float value)
-    //{
-    //    if (ignoreSliderChange || currentTarget == null) return;
-
-    //    float safeValue = Mathf.Max(value, 0.1f); // Evita escala zero
-    //    currentTarget.transform.localScale = originalScale * safeValue;
-
-    //    Debug.Log($"Escala alterada para: {originalScale * safeValue}");
-    //}
 
     private void AtualizarPosicaoUI()
     {
