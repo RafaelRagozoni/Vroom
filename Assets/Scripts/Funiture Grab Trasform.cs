@@ -3,6 +3,8 @@ using System.Buffers;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using System.Collections;
+
 
 namespace Oculus.Interaction
 {
@@ -24,10 +26,17 @@ namespace Oculus.Interaction
         private IGrabbable _grabbable;
         private Pose _grabDeltaInLocalSpace;
         private float _initialrightHandRotation;
+        private Vector3? _initialRayHitPoint;
+        private Vector3 _initialObjectPosition;
 
         private Quaternion _lastRotation = Quaternion.identity;
 
         private GrabPointDelta[] _deltas;
+
+        // Controlling the time of the selection
+        private float _selectionStartTime;
+        public float requiredHoldTime = 0.4f; //minimum time to hold the object before moving it
+        private bool _canMove = false;
 
         internal struct GrabPointDelta
         {
@@ -86,6 +95,10 @@ namespace Oculus.Interaction
         /// </summary>
         public void BeginTransform()
         {
+            // Starts the time counts
+            _selectionStartTime = Time.time;
+            _canMove = false;
+
             int count = _grabbable.GrabPoints.Count;
 
             //rent space only while using
@@ -100,7 +113,12 @@ namespace Oculus.Interaction
                 targetTransform.rotation);
             _lastRotation = Quaternion.identity;
 
+            _initialObjectPosition = targetTransform.position;
             _initialrightHandRotation = righHandInteractor.Rotation.eulerAngles.z;
+
+
+            var collider = targetTransform.GetComponentInParent<Collider>();
+            _initialRayHitPoint = GetInteractorRayHitPosition(righHandInteractor.Ray, collider);
 
             marker.GetComponent<Renderer>().enabled = true;
         }
@@ -111,76 +129,92 @@ namespace Oculus.Interaction
         /// </summary>
         public void UpdateTransform()
         {
-            int count = _grabbable.GrabPoints.Count;
-            Transform targetTransform = _grabbable.Transform;
-
-            //Vector3 localPosition = UpdateTransformerPointData(_grabbable.GrabPoints, ref _deltas);
-
-            //_lastRotation = UpdateRotation(count, _deltas) * _lastRotation;
-            //Quaternion rotation = _lastRotation * _grabDeltaInLocalSpace.rotation;
-            //targetTransform.rotation = rotation;
-
-            //Vector3 position = localPosition - targetTransform.TransformVector(_grabDeltaInLocalSpace.position);
-            //targetTransform.position = position;
-
-            //// Lock rotation
-            //targetTransform.rotation = Quaternion.Euler(0, 0, 0);
-
-            Debug.Log("Rotation: " + righHandInteractor.Rotation.eulerAngles.z);
-
-            targetTransform.localRotation = Quaternion.Euler(0.0f, 4*(_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z), 0.0f);
-
-            //if (!IsRotationMode())
-            //{
-                var collider = targetTransform.GetComponentInParent<Collider>();
-
-                SnapToRayIntersection(targetTransform);
-
-                SnapGrabableToGround(targetTransform, collider);
-
-                SnapGrabableToGrid(marker.transform);
-
-                collider.enabled = false;
-                var markerCollider = marker.GetComponentInParent<Collider>();
-                SnapGrabableToGround(marker.transform, markerCollider);
-                collider.enabled = true;
-            //}
-            //else
-            //{
-            //    Debug.Log("ROTATION MODE");
-            //}
-        }
-
-        private bool IsRotationMode()
-        {
-            if (leftHandInteractor.HasSelectedInteractable)
+            if (!_canMove)
             {
-
-                if (leftHandInteractor.SelectedInteractable == righHandInteractor.SelectedInteractable)
+                if (Time.time - _selectionStartTime >= requiredHoldTime)
                 {
-                    return true;
+                    _canMove = true;
+                }
+                else
+                {
+                    return; // ainda não pode mover
                 }
             }
 
-            return false;
+            int count = _grabbable.GrabPoints.Count;
+            Transform targetTransform = _grabbable.Transform;
+
+            RotateTransformWithInteractor(targetTransform);
+
+            var targetCollider = targetTransform.GetComponentInParent<Collider>();
+
+            SnapToRayIntersection(targetTransform);
+            SnapTransformToGround(targetTransform, targetCollider);
+            SnapTransformToGrid(marker.transform);
+
+            targetCollider.enabled = false;
+            var markerCollider = marker.GetComponentInParent<Collider>();
+            SnapTransformToGround(marker.transform, markerCollider);
+            targetCollider.enabled = true;
         }
+
+
+        private void RotateTransformWithInteractor(Transform targetTransform)
+        {
+            //var currentRotationY = targetTransform.localRotation.eulerAngles.y;
+            //var newRotationY = currentRotationY + 4 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
+            var newRotationY = 3 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
+            targetTransform.localRotation = Quaternion.Euler(0.0f, newRotationY, 0.0f);
+        }
+
+        //private void SnapToRayIntersection(Transform targetTransform)
+        //{
+        //    var collider = targetTransform.GetComponentInParent<Collider>();
+
+        //    var interactorRay = righHandInteractor.Ray;
+        //    var hitPoint = GetInteractorRayHitPosition(interactorRay, collider);
+
+        //    if (hitPoint != null && _initialRayHitPoint != null)
+        //    {
+        //        targetTransform.position = _initialObjectPosition + (hitPoint.Value - _initialRayHitPoint.Value);
+        //    }
+        //}
 
         private void SnapToRayIntersection(Transform targetTransform)
         {
             var collider = targetTransform.GetComponentInParent<Collider>();
+
+            var interactorRay = righHandInteractor.Ray;
+
+            var hitPoint = GetInteractorRayHitPosition(interactorRay, collider);
+
+            if (hitPoint != null)
+            {
+                targetTransform.position = hitPoint.Value;
+            }
+        }
+
+        private Vector3? GetInteractorRayHitPosition(Ray ray, Collider collider)
+        {
+            var originalColliderState = collider.enabled;
+
             collider.enabled = false;
-            var ray = righHandInteractor.Ray;
 
             ray.origin = ray.origin + rayStart * ray.direction;
 
+            Vector3? hitPoint = null;
+
             if (Physics.Raycast(ray, out var hitInfo))
             {
-                targetTransform.position = hitInfo.point;
+                hitPoint = hitInfo.point;
             }
-            collider.enabled = true;
+
+            collider.enabled = originalColliderState;
+
+            return hitPoint;
         }
 
-        private void SnapGrabableToGrid(Transform targetTransform)
+        private void SnapTransformToGrid(Transform targetTransform)
         {
             targetTransform.position = new Vector3(snapToGrid(transform.position.x, gridSize), transform.position.y, snapToGrid(transform.position.z, gridSize));
         }
@@ -190,7 +224,7 @@ namespace Oculus.Interaction
             return (float)Math.Round(v / gridSize) * gridSize;
         }
 
-        private static void SnapGrabableToGround(Transform targetTransform, Collider collider)
+        private static void SnapTransformToGround(Transform targetTransform, Collider collider)
         {
 
             var rayOrigin = targetTransform.position + Vector3.up * 100.0f;
@@ -224,8 +258,8 @@ namespace Oculus.Interaction
 
             var collider = _grabbable.Transform.GetComponentInParent<Collider>();
             marker.GetComponent<Renderer>().enabled = false;
-            SnapGrabableToGrid(_grabbable.Transform);
-            SnapGrabableToGround(_grabbable.Transform, collider);
+            SnapTransformToGrid(_grabbable.Transform);
+            SnapTransformToGround(_grabbable.Transform, collider);
         }
 
         internal static void InitializeDeltas(int count, List<Pose> poses, ref GrabPointDelta[] deltas)
