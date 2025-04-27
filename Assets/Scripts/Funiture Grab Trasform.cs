@@ -163,7 +163,7 @@ namespace Oculus.Interaction
         {
             //var currentRotationY = targetTransform.localRotation.eulerAngles.y;
             //var newRotationY = currentRotationY + 4 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
-            var newRotationY= 2 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
+            var newRotationY = 2 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
             targetTransform.localRotation = Quaternion.Euler(0.0f, newRotationY, 0.0f);
         }
 
@@ -226,7 +226,6 @@ namespace Oculus.Interaction
 
         private static void SnapTransformToGround(Transform targetTransform, Collider collider)
         {
-
             var rayOrigin = targetTransform.position + Vector3.up * 100.0f;
             var rayDirection = Vector3.down;
 
@@ -237,6 +236,12 @@ namespace Oculus.Interaction
 
             if (Physics.BoxCast(rayOrigin, extents, rayDirection, out var hitInfo))
             {
+                //if (hitInfo.collider.gameObject.CompareTag("celling"))
+                //{
+                //    collider.enabled = isEnabled;
+                //    return;
+                //}
+
                 collider.enabled = isEnabled;
                 targetTransform.position = new Vector3(targetTransform.position.x, hitInfo.point.y + collider.bounds.size.y / 2.0f, targetTransform.position.z);
             }
