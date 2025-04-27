@@ -13,6 +13,8 @@ public class ObjectEditorUI : MonoBehaviour
     private bool ignoreSliderChange = false;
     public Transform cameraRig;
 
+    public Button deleteButton;
+
     void Awake()
     {
         Instance = this;
@@ -22,6 +24,8 @@ public class ObjectEditorUI : MonoBehaviour
         scaleSlider.minValue = 0.1f;
         scaleSlider.maxValue = 2f;
         scaleSlider.onValueChanged.AddListener(OnScaleChanged);
+
+        deleteButton.onClick.AddListener(DeleteCurrentTarget);
     }
 
     public void OpenEditor(GameObject target, Vector3 position)
@@ -82,4 +86,17 @@ public class ObjectEditorUI : MonoBehaviour
         canvas.SetActive(false);
         currentTarget = null;
     }
+
+    public void DeleteCurrentTarget()
+    {
+        if (currentTarget != null)
+        {
+            Destroy(currentTarget); // Deleta o objeto da cena
+            currentTarget = null;   // Limpa o target
+            canvas.SetActive(false); // Esconde o editor também
+
+            Debug.Log("Objeto deletado!");
+        }
+    }
+
 }

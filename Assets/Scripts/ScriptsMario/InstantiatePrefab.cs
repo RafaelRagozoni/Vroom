@@ -93,23 +93,6 @@ public class InstantiatePrefab : MonoBehaviour
     public GameObject marker;
     public float rayStart = 1.0f;
 
-    //void InstantiateObject(GameObject prefab)
-    //{
-    //    if (!canClick) return; // Se o clique já foi registrado, ignora.
-
-    //    canClick = false; // Bloqueia cliques adicionais por um curto tempo.
-    //    Invoke(nameof(ResetClick), clickCooldown); // Reativa o clique após cooldown.
-
-    //    Debug.Log("Clique detectado!");
-
-    //    Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
-    //    //Quaternion rotation = Quaternion.LookRotation(sceneCamera.transform.forward, Vector3.up);
-    //    //rotation *= Quaternion.Euler(0, 90, 0); // Ajusta rotação
-    //    var rotation = Quaternion.identity; // Mantém a rotação original
-    //    var Object=Instantiate(prefab, position, rotation);
-    //    AddFurnitureBehaviour(Object);
-    //}
-
     void InstantiateObject(GameObject prefab)
     {
         if (!canClick) return;
