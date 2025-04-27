@@ -137,7 +137,7 @@ namespace Oculus.Interaction
                 }
                 else
                 {
-                    return; // ainda não pode mover
+                    return; // ainda nï¿½o pode mover
                 }
             }
 
