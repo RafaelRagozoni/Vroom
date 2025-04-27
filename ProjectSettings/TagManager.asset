@@ -4,8 +4,11 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - QDSUIToggleBorderlessButton
   - QDSUIBackplateGradient
+  - QDSUIToggleBorderlessButton
+  - floor
+  - wall
+  - celling
   layers:
   - Default
   - TransparentFX
