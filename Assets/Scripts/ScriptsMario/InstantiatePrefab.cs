@@ -103,8 +103,8 @@ public class InstantiatePrefab : MonoBehaviour
         Debug.Log("Clique detectado!");
 
         Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
-        Quaternion rotation = Quaternion.identity;
-        var obj = Instantiate(prefab, position, rotation);
+        //Quaternion rotation = Quaternion.identity;
+        var obj = Instantiate(prefab, position, prefab.gameObject.transform.rotation);
 
         // Adiciona Rigidbody se não tiver
         if (!obj.TryGetComponent<Rigidbody>(out var rb))

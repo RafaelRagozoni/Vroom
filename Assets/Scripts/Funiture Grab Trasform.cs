@@ -161,10 +161,11 @@ namespace Oculus.Interaction
 
         private void RotateTransformWithInteractor(Transform targetTransform)
         {
-            //var currentRotationY = targetTransform.localRotation.eulerAngles.y;
+            var currentRotationX = targetTransform.localRotation.eulerAngles.x;
+            var currentRotationZ = targetTransform.localRotation.eulerAngles.z;
             //var newRotationY = currentRotationY + 4 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
             var newRotationY = 2 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
-            targetTransform.localRotation = Quaternion.Euler(0.0f, newRotationY, 0.0f);
+            targetTransform.localRotation = Quaternion.Euler(currentRotationX, newRotationY, currentRotationZ);
         }
 
         //private void SnapToRayIntersection(Transform targetTransform)
@@ -232,6 +233,7 @@ namespace Oculus.Interaction
             var extents = collider.bounds.extents;
 
             var isEnabled = collider.enabled;
+            var boundMinY = collider.bounds.min.y;
             collider.enabled = false;
 
             if (Physics.BoxCast(rayOrigin, extents, rayDirection, out var hitInfo))
@@ -243,7 +245,13 @@ namespace Oculus.Interaction
                 //}
 
                 collider.enabled = isEnabled;
-                targetTransform.position = new Vector3(targetTransform.position.x, hitInfo.point.y + collider.bounds.size.y / 2.0f, targetTransform.position.z);
+                //targetTransform.position = new Vector3(targetTransform.position.x, hitInfo.point.y + (targetTransform.position.y - boundMinY), targetTransform.position.z);
+                float halfHeight = collider.bounds.extents.y;
+                targetTransform.position = new Vector3(
+                    targetTransform.position.x,
+                    hitInfo.point.y + halfHeight,
+                    targetTransform.position.z);
+
             }
             else
             {

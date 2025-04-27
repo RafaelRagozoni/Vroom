@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,8 @@ public class ObjectEditorUI : MonoBehaviour
     public Transform cameraRig;
 
     public Button deleteButton;
+
+    private static Dictionary<int, Vector3> objectsScaleMap = new Dictionary<int, Vector3>();
 
     void Awake()
     {
@@ -45,13 +48,19 @@ public class ObjectEditorUI : MonoBehaviour
         canvas.transform.position = position;
 
         // Faz o canvas olhar para a câmera
-        canvas.transform.LookAt(cameraRig);
+        //canvas.transform.LookAt(cameraRig);
 
-        // Corrige a rotação para não ficar de cabeça pra baixo
-        canvas.transform.rotation = Quaternion.LookRotation(canvas.transform.position - cameraRig.position);
+        //// Corrige a rotação para não ficar de cabeça pra baixo
+        //var quat = Quaternion.LookRotation(canvas.transform.position - cameraRig.position);
+        //canvas.transform.rotation = Quaternion.Euler(canvas.transform.rotation.eulerAngles.x, quat.eulerAngles.y, canvas.transform.eulerAngles.z);
 
         canvas.SetActive(true);
         ignoreSliderChange = false;
+
+        if (!objectsScaleMap.ContainsKey(currentTarget.GetInstanceID()))
+        {
+            objectsScaleMap[currentTarget.GetInstanceID()] = target.transform.localScale;
+        }
     }
 
 
@@ -74,7 +83,7 @@ public class ObjectEditorUI : MonoBehaviour
 
         // Aqui o valor do slider já é o multiplicador direto
         float scale = Mathf.Clamp(value, 0.5f, 2f);
-        currentTarget.transform.localScale = Vector3.one * scale;
+        currentTarget.transform.localScale =  objectsScaleMap[currentTarget.GetInstanceID()] *  scale;
 
         AtualizarPosicaoUI(); // <- reposiciona a UI com base na nova escala
 
