@@ -59,7 +59,14 @@ public class ObjectClickManager : MonoBehaviour
         if (oneClickPending)
         {
             oneClickPending = false;
-            ObjectEditorUI.Instance.CloseEditor();
+            if(DeleteManager.Instance.DeleteMode)
+            {
+                // Modo de deleção
+                Debug.Log("Deletando objeto: " + transform.parent.name);
+                Destroy(transform.parent.gameObject);
+            }
+            
+            //ObjectEditorUI.Instance.CloseEditor();
         }
     }
 
