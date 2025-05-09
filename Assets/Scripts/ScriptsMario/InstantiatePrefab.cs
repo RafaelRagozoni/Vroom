@@ -123,18 +123,7 @@ public class InstantiatePrefab : MonoBehaviour
         {
             collider.isTrigger = false; // Desativa o "Is Trigger"
         }
-
-        // Adiciona o script que desativa a gravidade após colisão
-        //obj.AddComponent<DisableGravityOnCollision>();
-
-        AddFurnitureBehaviour(obj);
-
-        //var child = obj.transform.Find("ISDK_RayGrabInteraction");
-        //if (child != null)
-        //{
-        //    child.gameObject.SetActive(false);
-        //}
-
+        //AddFurnitureBehaviour(obj);
     }
 
     void ResetClick()
