@@ -6,7 +6,7 @@ using Oculus.Interaction;
 using Unity.VisualScripting;
 
 public class InstantiatePrefab : MonoBehaviour
-{
+{   public static InstantiatePrefab Instance;
     public Camera sceneCamera;
     public List<GameObject> Prefabs;
     public GameObject Container;
@@ -14,6 +14,7 @@ public class InstantiatePrefab : MonoBehaviour
 
     void Start()
     {
+        Instance = this;
         GenerateButtons();
     }
 
@@ -61,7 +62,6 @@ public class InstantiatePrefab : MonoBehaviour
         if (transformer == null)
         {
             transformer = child.AddComponent<GrabFreeTransformer>();
-
         }
         transformer.gridSize = gridSize;
         transformer.righHandInteractor = rayInteractor;
@@ -93,9 +93,43 @@ public class InstantiatePrefab : MonoBehaviour
     public GameObject marker;
     public float rayStart = 1.0f;
 
-    void InstantiateObject(GameObject prefab)
+    //public void InstantiateObject(GameObject prefab)
+    //{
+    //    if (!canClick) return;
+
+    //    canClick = false;
+    //    Invoke(nameof(ResetClick), clickCooldown);
+
+    //    Debug.Log("Clique detectado!");
+
+    //    Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
+    //    //Quaternion rotation = Quaternion.identity;
+    //    var obj = Instantiate(prefab, position, prefab.gameObject.transform.rotation);
+
+    //    // Adiciona Rigidbody se não tiver
+    //    if (!obj.TryGetComponent<Rigidbody>(out var rb))
+    //    {
+    //        rb = obj.AddComponent<Rigidbody>();
+    //    }
+    //    // Desativa o isKinematic para garantir que a física vai funcionar
+    //    rb.isKinematic = false;
+
+    //    // Ativa a gravidade
+    //    rb.useGravity = true;
+    //    rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+    //    // Desmarca o IsTrigger do Collider (caso o prefab tenha um)
+    //    Collider collider = obj.GetComponent<Collider>();
+    //    if (collider != null)
+    //    {
+    //        collider.isTrigger = false; // Desativa o "Is Trigger"
+    //    }
+    //    AddFurnitureBehaviour(obj);
+
+    //}
+
+    public GameObject InstantiateObject(GameObject prefab)
     {
-        if (!canClick) return;
+        if (!canClick) return null;
 
         canClick = false;
         Invoke(nameof(ResetClick), clickCooldown);
@@ -103,27 +137,26 @@ public class InstantiatePrefab : MonoBehaviour
         Debug.Log("Clique detectado!");
 
         Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
-        //Quaternion rotation = Quaternion.identity;
-        var obj = Instantiate(prefab, position, prefab.gameObject.transform.rotation);
+        var obj = Instantiate(prefab, position, prefab.transform.rotation);
 
-        // Adiciona Rigidbody se não tiver
         if (!obj.TryGetComponent<Rigidbody>(out var rb))
-        {
             rb = obj.AddComponent<Rigidbody>();
-        }
-        // Desativa o isKinematic para garantir que a física vai funcionar
-        rb.isKinematic = false;
 
-        // Ativa a gravidade
+        rb.isKinematic = false;
         rb.useGravity = true;
-        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
-        // Desmarca o IsTrigger do Collider (caso o prefab tenha um)
+        rb.constraints = RigidbodyConstraints.FreezePositionX |
+                         RigidbodyConstraints.FreezePositionZ |
+                         RigidbodyConstraints.FreezeRotationZ |
+                         RigidbodyConstraints.FreezeRotationX |
+                         RigidbodyConstraints.FreezeRotationY;
+
         Collider collider = obj.GetComponent<Collider>();
         if (collider != null)
-        {
-            collider.isTrigger = false; // Desativa o "Is Trigger"
-        }
-        //AddFurnitureBehaviour(obj);
+            collider.isTrigger = false;
+
+        AddFurnitureBehaviour(obj);
+
+        return obj; // <-- agora retorna o objeto instanciado
     }
 
     void ResetClick()

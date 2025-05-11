@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 280679367648827989}
   - component: {fileID: 4616127293507538934}
   m_Layer: 0
-  m_Name: Little Table 1
+  m_Name: Little Table 2
   m_TagString: ChairListTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 50ced3092a2c6d5418dbb2df80c370a8, type: 2}
+  - {fileID: 2100000, guid: 83dfbf8af238f7a4a954d51f9652b34a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -24,18 +24,32 @@ public class DeleteManager : MonoBehaviour
         }     
    }
 
+    private float lastCallTime = 0f;
+    private float callCooldown = 0.3f; // 300 ms de intervalo mínimo
+
     public void DeletionMode()
     {
+        if (Time.time - lastCallTime < callCooldown)
+        {
+            Debug.Log("Ignorado: chamada muito rápida");
+            return; // Ignora se a função foi chamada há menos de 0.3s
+        }
+
+        lastCallTime = Time.time;
+
         if (DeleteMode)
         {
+            Debug.Log("Modo de Deleção Desativado");
             DeleteMode = false;
             Lixeira.SetActive(false);
+            Debug.Log("Lixeira Desativada");
         }
         else
         {
+            Debug.Log("Modo de Deleção Ativado");
             DeleteMode = true;
             Lixeira.SetActive(true);
+            Debug.Log("Lixeira Ativada");
         }
-
     }
 }

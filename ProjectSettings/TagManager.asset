@@ -9,6 +9,7 @@ TagManager:
   - floor
   - wall
   - celling
+  - ChairListTag
   layers:
   - Default
   - TransparentFX
