@@ -29,6 +29,7 @@ public class DeleteManager : MonoBehaviour
 
     public void DeletionMode()
     {
+        InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
         if (Time.time - lastCallTime < callCooldown)
         {
             Debug.Log("Ignorado: chamada muito rápida");
@@ -51,5 +52,13 @@ public class DeleteManager : MonoBehaviour
             Lixeira.SetActive(true);
             Debug.Log("Lixeira Ativada");
         }
+    }
+
+    public void DeactivateDeletionMode()
+    {
+        Debug.Log("Modo de Deleção Desativado");
+        DeleteMode = false;
+        Lixeira.SetActive(false);
+        Debug.Log("Lixeira Desativada");
     }
 }

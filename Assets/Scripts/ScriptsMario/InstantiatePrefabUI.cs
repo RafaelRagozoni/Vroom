@@ -16,7 +16,7 @@ public class InstantiatePrefabUI : MonoBehaviour
     private float x_position;
     private float z_position;
 
-    public bool AddFurnitureMode = false;
+    public bool CategoriesAddFurnitureMode = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,7 +47,7 @@ public class InstantiatePrefabUI : MonoBehaviour
 
     public void DeactivateAddFurnitureMode()
     {
-        AddFurnitureMode = false;
+        CategoriesAddFurnitureMode = false;
         foreach (GameObject obj in spawnedPrefabs)
         {
             if (obj != null)
@@ -60,7 +60,8 @@ public class InstantiatePrefabUI : MonoBehaviour
 
     public void InstantiateFurnitureUI()
     {
-        if (AddFurnitureMode==false)
+        DeleteManager.Instance.DeactivateDeletionMode();
+        if (CategoriesAddFurnitureMode==false)
         {
             for (int i = 0; i < FurnitureCategories.Count; ++i)
             {
@@ -91,38 +92,8 @@ public class InstantiatePrefabUI : MonoBehaviour
                 }
             }
         }
-        AddFurnitureMode = true;
+        CategoriesAddFurnitureMode = true;
     }
-
-    //public void InstantiateListUI(List<GameObject> List)
-    //{
-    //    for (int i = 0; i < List.Count; ++i)
-    //    {
-    //        x_position = sceneCamera.transform.position.x + r * Mathf.Cos(i * 2 * Mathf.PI / List.Count);
-    //        z_position = sceneCamera.transform.position.z + r * Mathf.Sin(i * 2 * Mathf.PI / List.Count);
-    //        Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y, z_position);
-    //        Vector3 directionToCamera = sceneCamera.transform.position - position;
-    //        Quaternion rotation = Quaternion.LookRotation(directionToCamera);
-    //        GameObject prefab = Instantiate(List[i], position, rotation);
-    //        spawnedPrefabs.Add(prefab);
-
-    //        var grabbable = prefab.GetComponentInChildren<Grabbable>();
-    //        if (grabbable != null)
-    //        {
-    //            grabbable.enabled = false; // Impede de ser agarrado
-    //            Debug.Log($"Desativado Grabbable no filho de {prefab.name}");
-    //            // Adiciona o InstantiateObjectClickManager se ainda não tiver
-    //            if (grabbable.GetComponent<InstantiateObjectClickManager>() == null)
-    //            {
-    //                grabbable.gameObject.AddComponent<InstantiateObjectClickManager>();
-    //            }
-    //        }
-    //        else
-    //        {
-    //            Debug.LogWarning($"Nenhum Grabbable encontrado em {prefab.name} ou filhos.");
-    //        }
-    //    }
-    //}
 
     public void InstantiateListUI(List<GameObject> List)
     {
