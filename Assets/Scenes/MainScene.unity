@@ -33474,8 +33474,8 @@ MonoBehaviour:
   _transformFeatureConfigs:
     _values:
     - _mode: 0
-      _feature: 5
-      _state: 15
+      _feature: 1
+      _state: 3
   _transformConfig:
     PositionOffset: {x: 0, y: 0, z: 0}
     RotationOffset: {x: 0, y: 0, z: 0}
@@ -51851,7 +51851,19 @@ MonoBehaviour:
       m_Calls: []
   _whenSelect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 476606089}
+        m_TargetAssemblyTypeName: InstantiatePrefabUI, Assembly-CSharp
+        m_MethodName: DeactivateAddFurnitureMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _whenUnselect:
     m_PersistentCalls:
       m_Calls: []
