@@ -31,6 +31,7 @@ public class InstantiateObjectClickManager : MonoBehaviour
 
         // Adicione aqui o que deve acontecer ao clicar no objeto
         InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
+        InstantiatePrefabUI.Instance.InstantiateFurnitureMode = false;
         Debug.Log("Objeto clicado: " + target.name);
 
         if (target.CompareTag("ChairListTag"))

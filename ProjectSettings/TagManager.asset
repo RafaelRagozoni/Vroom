@@ -10,6 +10,7 @@ TagManager:
   - wall
   - celling
   - ChairListTag
+  - BedListTag
   layers:
   - Default
   - TransparentFX
