@@ -57,6 +57,24 @@ public class CategoriesObjectClickManager : MonoBehaviour
             InstantiatePrefabUI.Instance.InstantiateListUI(InstantiatePrefabUI.Instance.AuxPrefabList);
         }
 
+        if (target.CompareTag("SofaListTag"))
+        {
+            Debug.Log("Entrou na tag");
+            ChunkSize = InstantiatePrefabUI.Instance.ChunkSize;
+            InstantiatePrefabUI.Instance.currentCategoryList = InstantiatePrefabUI.Instance.SofaList;
+            InstantiatePrefabUI.Instance.UpdateAuxList(InstantiatePrefabUI.Instance.currentCategoryList, ChunkSize, 0);
+            InstantiatePrefabUI.Instance.InstantiateListUI(InstantiatePrefabUI.Instance.AuxPrefabList);
+        }
+
+        if (target.CompareTag("TableListTag"))
+        {
+            Debug.Log("Entrou na tag");
+            ChunkSize = InstantiatePrefabUI.Instance.ChunkSize;
+            InstantiatePrefabUI.Instance.currentCategoryList = InstantiatePrefabUI.Instance.TableList;
+            InstantiatePrefabUI.Instance.UpdateAuxList(InstantiatePrefabUI.Instance.currentCategoryList, ChunkSize, 0);
+            InstantiatePrefabUI.Instance.InstantiateListUI(InstantiatePrefabUI.Instance.AuxPrefabList);
+        }
+
 
 
     }

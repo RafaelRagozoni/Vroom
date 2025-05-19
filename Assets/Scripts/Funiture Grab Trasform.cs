@@ -18,7 +18,6 @@ namespace Oculus.Interaction
     {
         public float gridSize = 1.0f;
         public float rayStart = 1.0f;
-        public Transform rayOrigin;
         public RayInteractor righHandInteractor;
         public RayInteractor leftHandInteractor;
         public GameObject marker;
@@ -168,18 +167,6 @@ namespace Oculus.Interaction
             targetTransform.localRotation = Quaternion.Euler(currentRotationX, newRotationY, currentRotationZ);
         }
 
-        //private void SnapToRayIntersection(Transform targetTransform)
-        //{
-        //    var collider = targetTransform.GetComponentInParent<Collider>();
-
-        //    var interactorRay = righHandInteractor.Ray;
-        //    var hitPoint = GetInteractorRayHitPosition(interactorRay, collider);
-
-        //    if (hitPoint != null && _initialRayHitPoint != null)
-        //    {
-        //        targetTransform.position = _initialObjectPosition + (hitPoint.Value - _initialRayHitPoint.Value);
-        //    }
-        //}
 
         private void SnapToRayIntersection(Transform targetTransform)
         {
@@ -238,15 +225,10 @@ namespace Oculus.Interaction
 
             if (Physics.BoxCast(rayOrigin, extents, rayDirection, out var hitInfo))
             {
-                //if (hitInfo.collider.gameObject.CompareTag("celling"))
-                //{
-                //    collider.enabled = isEnabled;
-                //    return;
-                //}
 
                 collider.enabled = isEnabled;
-                //targetTransform.position = new Vector3(targetTransform.position.x, hitInfo.point.y + (targetTransform.position.y - boundMinY), targetTransform.position.z);
-                float halfHeight = collider.bounds.extents.y;
+
+                float halfHeight = 0.0f;
                 targetTransform.position = new Vector3(
                     targetTransform.position.x,
                     hitInfo.point.y + halfHeight,

@@ -10816,6 +10816,7 @@ GameObject:
   - component: {fileID: 476606087}
   - component: {fileID: 476606088}
   - component: {fileID: 476606089}
+  - component: {fileID: 476606090}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -10935,34 +10936,74 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneCamera: {fileID: 526514016}
   FurnitureCategories:
-  - {fileID: 8876263667722939455, guid: 596b9a8f7a5947c4ba89f40235e02c24, type: 3}
-  - {fileID: 8749610750269316769, guid: 0d39109e2f161734290df22b5a73ef7b, type: 3}
-  - {fileID: 5372549914703172579, guid: bf961bd4b92c0d84d99d19b79779a24a, type: 3}
-  - {fileID: 8932203136470199698, guid: b91e8982c05c7dc41a5630027779c949, type: 3}
-  - {fileID: 8932203136470199698, guid: b91e8982c05c7dc41a5630027779c949, type: 3}
-  - {fileID: 8932203136470199698, guid: b91e8982c05c7dc41a5630027779c949, type: 3}
-  - {fileID: 8932203136470199698, guid: b91e8982c05c7dc41a5630027779c949, type: 3}
-  - {fileID: 8932203136470199698, guid: b91e8982c05c7dc41a5630027779c949, type: 3}
-  - {fileID: 8932203136470199698, guid: b91e8982c05c7dc41a5630027779c949, type: 3}
-  - {fileID: 8932203136470199698, guid: b91e8982c05c7dc41a5630027779c949, type: 3}
+  - {fileID: 6769397119437869972, guid: 20f538f9552449544bb24ad8b1e50579, type: 3}
+  - {fileID: 6359599523400466009, guid: 892f52e0241b1c54eb51b74d09d6f8cb, type: 3}
+  - {fileID: 4534112987973523154, guid: 87ba783cfab3b2649855efe75897d948, type: 3}
+  - {fileID: 8914469654009101223, guid: 9d4dbdc50481e4948af4938e4ac8d26b, type: 3}
   ChairList:
-  - {fileID: 6308256345737797631, guid: 909b7247f5fcfa24191ad08fe4152486, type: 3}
-  - {fileID: 6308256345737797631, guid: bf4b8f4a648d0964da217e960ce8b404, type: 3}
-  - {fileID: 6308256345737797631, guid: 70e18274560ce9142879b9f8fb5bb600, type: 3}
-  - {fileID: 6308256345737797631, guid: dd84bd69b9b01df47802f20748ad5fd9, type: 3}
-  - {fileID: 6308256345737797631, guid: 797d4ac84b76fc648b0f23562a18e39c, type: 3}
-  - {fileID: 8932203136470199698, guid: b91e8982c05c7dc41a5630027779c949, type: 3}
-  - {fileID: 100002, guid: 1687e9be5dcc14944b3ebe4c68c7f06e, type: 3}
-  - {fileID: 148966, guid: 55ee4d169dfcc4b4484fd9ccd27b7764, type: 3}
-  - {fileID: 1985060742872480, guid: 91826be234b81b74c9b629555895a8e5, type: 3}
-  - {fileID: 100000, guid: 95c0b41755d1d2d4a99b2a58137d9d1b, type: 3}
-  - {fileID: 110870, guid: 1fcc8ec3f56125644a57945c32cc1946, type: 3}
-  BedList: []
+  - {fileID: 919132149155446097, guid: 6da27cdc1a1bd7940a7391628a4969d6, type: 3}
+  - {fileID: 919132149155446097, guid: 3b44f8164e0f19343a9398f47132cf6b, type: 3}
+  - {fileID: 919132149155446097, guid: e82e2942dd35e6c4485747b0b3fb288f, type: 3}
+  - {fileID: 919132149155446097, guid: fda8dbc7767012a4b9e5d33278c481d2, type: 3}
+  - {fileID: 919132149155446097, guid: ecae44d56632cdb459a2f97f6aa9c1ff, type: 3}
+  - {fileID: 919132149155446097, guid: c612c7e322c9e49439129a6877729bdd, type: 3}
+  - {fileID: 919132149155446097, guid: 4d7c7859c7aa228479b1576af28f4148, type: 3}
+  - {fileID: 919132149155446097, guid: 0ea49f48c0355cf4ba7a8db805733500, type: 3}
+  BedList:
+  - {fileID: 919132149155446097, guid: fc034308f0355b148b818a7fc744df36, type: 3}
+  - {fileID: 919132149155446097, guid: dad6b8a023daa23438affa259d08debb, type: 3}
+  - {fileID: 919132149155446097, guid: 95e382f3a1fcb224ba2a9ff8b9bd69ab, type: 3}
+  - {fileID: 919132149155446097, guid: 4e1525ba9c6b2b0499db63f1fe626900, type: 3}
+  - {fileID: 919132149155446097, guid: 190386cb8847f8547b9c98a29554590e, type: 3}
+  - {fileID: 919132149155446097, guid: 08b211e05d8b5e141b6fa63437a8d3ca, type: 3}
+  - {fileID: 919132149155446097, guid: fcbed93928ef35248b83efc4f948fd00, type: 3}
+  - {fileID: 919132149155446097, guid: 37537d0c07a21df44a16989ae96aeda9, type: 3}
+  - {fileID: 919132149155446097, guid: d12776cb3b8dab14b9455c22274e49d3, type: 3}
+  - {fileID: 919132149155446097, guid: 86c9bcb0868fe3148bc59e013f2ff66f, type: 3}
+  - {fileID: 919132149155446097, guid: 9e45b612e633e69429d65fb14ef5c906, type: 3}
+  SofaList:
+  - {fileID: 919132149155446097, guid: 301f591a9550cc3418cb016f79f6c704, type: 3}
+  - {fileID: 919132149155446097, guid: b540ae07370d4ad4cbdc87388ac72e5e, type: 3}
+  - {fileID: 919132149155446097, guid: 0085ab7c30d936148a79f9cb68aaaedb, type: 3}
+  - {fileID: 919132149155446097, guid: 46a6861079cc6b442a41a0e02fe19c02, type: 3}
+  - {fileID: 919132149155446097, guid: a37471d17a6fbf74ea8ad1e1c515a32e, type: 3}
+  - {fileID: 919132149155446097, guid: 65f0e38ac0f86564eb5caf3cae477a95, type: 3}
+  - {fileID: 919132149155446097, guid: 7061e603a2280694aa72e9a974c36679, type: 3}
+  - {fileID: 919132149155446097, guid: 31ac5c7486d3aa640b7f85ec51042fda, type: 3}
+  - {fileID: 919132149155446097, guid: e72ce91fc5885ed4996720d065e9a0f1, type: 3}
+  - {fileID: 919132149155446097, guid: 37037d6f0db58c6478666aed2bb49653, type: 3}
+  TableList:
+  - {fileID: 919132149155446097, guid: c25adda215c03cb4ebfbf26d537ef399, type: 3}
+  - {fileID: 919132149155446097, guid: cb5524e47c254dd4580465ebd4b01721, type: 3}
+  - {fileID: 919132149155446097, guid: cd0004bdff1600a42be92b1568fed5c8, type: 3}
+  - {fileID: 919132149155446097, guid: 416d3dbcd8c90544faf1268ea369f80c, type: 3}
+  - {fileID: 919132149155446097, guid: ef2fece49179d914cacc9f2adc1a56f8, type: 3}
+  - {fileID: 919132149155446097, guid: d81793a2d73f26e48b16c9874ddac1e0, type: 3}
+  - {fileID: 919132149155446097, guid: c5348971e07d1b142b57a2ab2e3c36c9, type: 3}
+  - {fileID: 919132149155446097, guid: 3343e3e6d0ca37b4c9392b7e990b1658, type: 3}
+  - {fileID: 919132149155446097, guid: 4bd03f14af3c5aa4b9033b69d4ef1818, type: 3}
+  - {fileID: 919132149155446097, guid: b433937f1c4cb8541a8437b25f2be1eb, type: 3}
   AuxPrefabList: []
   currentCategoryList: []
   ChunkSize: 6
   CategoriesAddFurnitureMode: 0
   InstantiateFurnitureMode: 0
+--- !u!114 &476606090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476606082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b2973b4c37eaa4081c310b662a52ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  furniturePrefab: {fileID: 5278135885151509768, guid: f94720c42987b624093e765fddf1c06a, type: 3}
+  righHandInteractor: {fileID: 1310671784}
+  leftHandInteractor: {fileID: 231838771}
+  scale: 1
 --- !u!1 &476814086
 GameObject:
   m_ObjectHideFlags: 0
@@ -48248,7 +48289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7114770129336771053, guid: df64bf5efda75be4db0c812f9277d678, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7114770130731238579, guid: df64bf5efda75be4db0c812f9277d678, type: 3}
       propertyPath: m_SizeDelta.x

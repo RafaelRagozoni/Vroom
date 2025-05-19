@@ -15,6 +15,8 @@ public class InstantiatePrefabUI : MonoBehaviour
     //Object List
     public List<GameObject> ChairList;
     public List<GameObject> BedList;
+    public List<GameObject> SofaList;
+    public List<GameObject> TableList;
 
 
     private float r = 1.0f;
@@ -32,7 +34,7 @@ public class InstantiatePrefabUI : MonoBehaviour
     void Start()
     {
         currentStartIndex = 0;
-        ChunkSize = 3;
+        ChunkSize = 5;
         Instance = this;
     }
 
@@ -81,16 +83,31 @@ public class InstantiatePrefabUI : MonoBehaviour
             {
                 x_position = sceneCamera.transform.position.x + r * Mathf.Cos(i * 2 * Mathf.PI / FurnitureCategories.Count);
                 z_position = sceneCamera.transform.position.z + r * Mathf.Sin(i * 2 * Mathf.PI / FurnitureCategories.Count);
-                Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y, z_position);
-                Vector3 directionToCamera = sceneCamera.transform.position - position;
+                //Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y-0.3f, z_position);
+                //Vector3 directionToCamera = sceneCamera.transform.position - position;
+                //Quaternion rotation = Quaternion.LookRotation(directionToCamera);
+                Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y - 0.3f, z_position);
+
+                // Calcula direção apenas no plano XZ
+                Vector3 cameraPosXZ = new Vector3(sceneCamera.transform.position.x, position.y, sceneCamera.transform.position.z);
+                Vector3 directionToCamera = cameraPosXZ - position;
                 Quaternion rotation = Quaternion.LookRotation(directionToCamera);
-                GameObject prefab = Instantiate(FurnitureCategories[i], position, rotation);
+
+                GameObject prefab = GetComponent<FurnitureSpawner>().SpawnPrefab(FurnitureCategories[i],position,rotation);//Instantiate(FurnitureCategories[i], position, rotation);
+
                 spawnedPrefabs.Add(prefab);
+
+                // NORMALIZA O TAMANHO para UI
+                NormalizeScale(prefab);
+
+                // Guarda o original para futura instância real
+                var holder = prefab.AddComponent<OriginalPrefabHolder>();
+                holder.originalPrefab = FurnitureCategories[i];
 
                 var grabbable = prefab.GetComponentInChildren<Grabbable>();
                 if (grabbable != null)
                 {
-                    grabbable.enabled = false; // Impede de ser agarrado
+                    //grabbable.enabled = false; // Impede de ser agarrado
                     Debug.Log($"Desativado Grabbable no filho de {prefab.name}");
 
                     // Adiciona o CategoriesObjectClickManager se ainda não tiver
@@ -110,20 +127,73 @@ public class InstantiatePrefabUI : MonoBehaviour
         
     }
 
+    //public void InstantiateListUI(List<GameObject> List)
+    //{
+    //    for (int i = 0; i < List.Count; ++i)
+    //    {
+    //        x_position = sceneCamera.transform.position.x + r * Mathf.Cos(i * 2 * Mathf.PI / List.Count);
+    //        z_position = sceneCamera.transform.position.z + r * Mathf.Sin(i * 2 * Mathf.PI / List.Count);
+    //        Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y, z_position);
+    //        Vector3 directionToCamera = sceneCamera.transform.position - position;
+    //        Quaternion rotation = Quaternion.LookRotation(directionToCamera);
+
+    //        GameObject prefab = Instantiate(List[i], position, rotation);
+    //        spawnedPrefabs.Add(prefab);
+
+    //        // Remove o componente CategoriesObjectClickManager, se existir
+    //        var categoryClickManager = prefab.GetComponentInChildren<CategoriesObjectClickManager>();
+    //        if (categoryClickManager != null)
+    //        {
+    //            Destroy(categoryClickManager);
+    //            Debug.Log($"Removido CategoriesObjectClickManager de {prefab.name}");
+    //        }
+
+    //        var grabbable = prefab.GetComponentInChildren<Grabbable>();
+    //        if (grabbable != null)
+    //        {
+    //            grabbable.enabled = false; // Impede de ser agarrado
+    //            Debug.Log($"Desativado Grabbable no filho de {prefab.name}");
+    //            if (grabbable.GetComponent<InstantiateObjectClickManager>() == null)
+    //            {
+    //                grabbable.gameObject.AddComponent<InstantiateObjectClickManager>();
+    //            }
+    //        }
+    //        else
+    //        {
+    //            Debug.LogWarning($"Nenhum Grabbable encontrado em {prefab.name} ou filhos.");
+    //        }
+    //    }
+    //}
     public void InstantiateListUI(List<GameObject> List)
     {
         for (int i = 0; i < List.Count; ++i)
         {
             x_position = sceneCamera.transform.position.x + r * Mathf.Cos(i * 2 * Mathf.PI / List.Count);
             z_position = sceneCamera.transform.position.z + r * Mathf.Sin(i * 2 * Mathf.PI / List.Count);
-            Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y, z_position);
-            Vector3 directionToCamera = sceneCamera.transform.position - position;
+            //Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y, z_position);
+            //Vector3 directionToCamera = sceneCamera.transform.position - position;
+            //Quaternion rotation = Quaternion.LookRotation(directionToCamera);
+            //Quaternion rotation = Quaternion.LookRotation(directionToCamera);
+            Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y - 0.3f, z_position);
+
+            // Calcula direção apenas no plano XZ
+            Vector3 cameraPosXZ = new Vector3(sceneCamera.transform.position.x, position.y, sceneCamera.transform.position.z);
+            Vector3 directionToCamera = cameraPosXZ - position;
             Quaternion rotation = Quaternion.LookRotation(directionToCamera);
 
-            GameObject prefab = Instantiate(List[i], position, rotation);
+            // Instancia a miniatura
+            //GameObject prefab = Instantiate(List[i], position, rotation);//GetComponent<FurnitureSpawner>().SpawnPrefab(List[i], position, rotation);
+            GameObject prefab = GetComponent<FurnitureSpawner>().SpawnPrefab(List[i], position, rotation);
             spawnedPrefabs.Add(prefab);
 
-            // Remove o componente CategoriesObjectClickManager, se existir
+            // NORMALIZA O TAMANHO para UI
+            NormalizeScale(prefab);
+
+            // Guarda o original para futura instância real
+            var holder = prefab.AddComponent<OriginalPrefabHolder>();
+            holder.originalPrefab = List[i];
+
+            // Remove interações não desejadas na UI
             var categoryClickManager = prefab.GetComponentInChildren<CategoriesObjectClickManager>();
             if (categoryClickManager != null)
             {
@@ -134,8 +204,10 @@ public class InstantiatePrefabUI : MonoBehaviour
             var grabbable = prefab.GetComponentInChildren<Grabbable>();
             if (grabbable != null)
             {
-                grabbable.enabled = false; // Impede de ser agarrado
+                //grabbable.enabled = false; // Impede de ser agarrado
                 Debug.Log($"Desativado Grabbable no filho de {prefab.name}");
+
+                // Adiciona script para instanciar original ao clicar
                 if (grabbable.GetComponent<InstantiateObjectClickManager>() == null)
                 {
                     grabbable.gameObject.AddComponent<InstantiateObjectClickManager>();
@@ -148,6 +220,29 @@ public class InstantiatePrefabUI : MonoBehaviour
         }
     }
 
+
+    private void NormalizeScale(GameObject obj)
+    {
+        // Define o tamanho alvo da maior dimensão
+        float targetSize = 0.6f;
+
+        // Calcula o maior lado do bounds
+        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+        Bounds bounds = new Bounds(obj.transform.position, Vector3.zero);
+        foreach (var rend in renderers)
+        {
+            bounds.Encapsulate(rend.bounds);
+        }
+
+        Debug.Log($"Bounds size: {bounds.size}");
+
+        float maxDimension = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
+        if (maxDimension > 0f)
+        {
+            float scaleFactor = targetSize / maxDimension;
+            obj.transform.localScale *= scaleFactor;
+        }
+    }
 
     public void UpdateAuxList(List<GameObject> sourceList, int chunkSize, int startIndex)
     {

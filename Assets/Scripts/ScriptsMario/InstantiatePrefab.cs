@@ -137,10 +137,13 @@ public class InstantiatePrefab : MonoBehaviour
         Debug.Log("Clique detectado!");
 
         Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
-        var obj = Instantiate(prefab, position, prefab.transform.rotation);
+        //var obj = Instantiate(prefab, position, prefab.transform.rotation);
+        var obj = GetComponent<FurnitureSpawner>().SpawnPrefab(prefab, position, prefab.transform.rotation);
 
         if (!obj.TryGetComponent<Rigidbody>(out var rb))
             rb = obj.AddComponent<Rigidbody>();
+
+        
 
         rb.isKinematic = false;
         rb.useGravity = true;
@@ -154,7 +157,7 @@ public class InstantiatePrefab : MonoBehaviour
         if (collider != null)
             collider.isTrigger = false;
 
-        AddFurnitureBehaviour(obj);
+        //AddFurnitureBehaviour(obj);
 
         return obj; // <-- agora retorna o objeto instanciado
     }

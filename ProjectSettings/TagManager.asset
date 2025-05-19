@@ -11,6 +11,8 @@ TagManager:
   - celling
   - ChairListTag
   - BedListTag
+  - SofaListTag
+  - TableListTag
   layers:
   - Default
   - TransparentFX
