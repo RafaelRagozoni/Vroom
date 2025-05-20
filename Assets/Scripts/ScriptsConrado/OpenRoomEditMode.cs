@@ -34,7 +34,7 @@ public class OpenRoomEditMode : MonoBehaviour
             oculusCursorLeft.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
             selectionCircleRight.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
             selectionCircleLeft.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
-            roomReshaper.enabled = true;
+            //roomReshaper.enabled = true;
             dentro = false;
         }
         else
@@ -47,7 +47,7 @@ public class OpenRoomEditMode : MonoBehaviour
             oculusCursorLeft.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
             selectionCircleRight.transform.localScale = new Vector3(0.016f, 0.016f, 1f);
             selectionCircleLeft.transform.localScale = new Vector3(0.016f, 0.016f, 1f);
-            roomReshaper.enabled = false;
+            //roomReshaper.enabled = false;
             dentro = true;
         }
 
@@ -56,7 +56,7 @@ public class OpenRoomEditMode : MonoBehaviour
 
     private IEnumerator ResetCanRun()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(1);
         canRun = true;
     }
 }

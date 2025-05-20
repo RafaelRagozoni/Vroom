@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shapeName: RoomEdit
   _thumbFeatureConfigs:
-    _value: []
+    _value:
+    - _mode: 0
+      _feature: 0
+      _state: 2
   _indexFeatureConfigs:
     _value:
     - _mode: 1
