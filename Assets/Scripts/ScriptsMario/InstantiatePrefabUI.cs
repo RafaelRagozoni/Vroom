@@ -170,10 +170,7 @@ public class InstantiatePrefabUI : MonoBehaviour
         {
             x_position = sceneCamera.transform.position.x + r * Mathf.Cos(i * 2 * Mathf.PI / List.Count);
             z_position = sceneCamera.transform.position.z + r * Mathf.Sin(i * 2 * Mathf.PI / List.Count);
-            //Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y, z_position);
-            //Vector3 directionToCamera = sceneCamera.transform.position - position;
-            //Quaternion rotation = Quaternion.LookRotation(directionToCamera);
-            //Quaternion rotation = Quaternion.LookRotation(directionToCamera);
+
             Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y - 0.3f, z_position);
 
             // Calcula direção apenas no plano XZ

@@ -23,6 +23,8 @@ public class OpenRoomEditMode : MonoBehaviour
     {
         if (!canRun) return;
 
+        InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
+        InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
         canRun = false;
         // Faz a camera fica na posição de cima 
         if (dentro)
