@@ -35,8 +35,17 @@ public class FurnitureSpawner : MonoBehaviour
             {
                 modelCollider.enabled = false;
             }
-            furniturePrefabInstance.tag = model.tag;
-            return furniturePrefabInstance;
+
+            if (model.tag != "Untagged")
+            {
+                furniturePrefabInstance.tag = model.tag;
+            }
+            else
+            {
+                furniturePrefabInstance.tag = "Furniture";
+            }
+
+                return furniturePrefabInstance;
         }
         else
         {

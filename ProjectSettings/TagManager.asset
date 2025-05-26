@@ -13,6 +13,7 @@ TagManager:
   - BedListTag
   - SofaListTag
   - TableListTag
+  - Furniture
   layers:
   - Default
   - TransparentFX

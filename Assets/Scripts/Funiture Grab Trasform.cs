@@ -150,6 +150,7 @@ namespace Oculus.Interaction
             SnapToRayIntersection(targetTransform);
             SnapTransformToGround(targetTransform, targetCollider);
             SnapTransformToGrid(marker.transform);
+            //ResolveWallPenetration(targetTransform, targetCollider);
 
             targetCollider.enabled = false;
             var markerCollider = marker.GetComponentInParent<Collider>();
@@ -157,6 +158,34 @@ namespace Oculus.Interaction
             targetCollider.enabled = true;
         }
 
+        private void ResolveWallPenetration(Transform targetTransform, Collider collider)
+        {
+            var hits = Physics.OverlapBox(targetTransform.position, collider.bounds.extents, targetTransform.rotation);
+
+            foreach (var hit in hits)
+            {
+                if (hit.tag == "wall")
+                {
+                    var adjustedCollider = hit.gameObject.AddComponent<BoxCollider>();
+                    adjustedCollider.center = new Vector3(0.0f, -2.5f, 0.0f);
+                    adjustedCollider.size = new Vector3(100.0f, 5.0f, 100.0f);
+
+                    Debug.Log("IS HITING WALL!!");
+                    if (Physics.ComputePenetration(
+                        adjustedCollider, hit.transform.position, hit.transform.rotation,
+                        collider, targetTransform.position, targetTransform.rotation,
+                        out Vector3 direction, out float distance))
+                    {
+                        Debug.Log("Penetration is: " + distance);
+                        direction.y = 0;
+                        targetTransform.position -= direction * distance;
+                    }
+
+                    Destroy(adjustedCollider);
+                }
+            }
+
+        }
 
         private void RotateTransformWithInteractor(Transform targetTransform)
         {
@@ -221,25 +250,49 @@ namespace Oculus.Interaction
 
             var isEnabled = collider.enabled;
             var boundMinY = collider.bounds.min.y;
+
             collider.enabled = false;
+            var hits = Physics.BoxCastAll(rayOrigin, extents, rayDirection);
 
-            if (Physics.BoxCast(rayOrigin, extents, rayDirection, out var hitInfo))
+            var closestValidHit = GetClosestHit(hits);
+
+            if (closestValidHit != null)
             {
-
                 collider.enabled = isEnabled;
 
                 float halfHeight = 0.0f;
                 targetTransform.position = new Vector3(
                     targetTransform.position.x,
-                    hitInfo.point.y + halfHeight,
+                    closestValidHit.Value.point.y + halfHeight,
                     targetTransform.position.z);
-
             }
-            else
+
+            collider.enabled = isEnabled;
+
+
+            RaycastHit? GetClosestHit(RaycastHit[] hits)
             {
-                collider.enabled = isEnabled;
+                RaycastHit? closest = null;
+
+                float finalDistance = 9999999.0f;
+
+                foreach (var hit in hits)
+                {
+                    if (hit.transform.gameObject.tag == "floor" || hit.transform.gameObject.tag == "Furniture")
+                    {
+                        float distance = (rayOrigin - hit.point).sqrMagnitude;
+                        if (distance < finalDistance)
+                        {
+                            closest = hit;
+                            finalDistance = distance;
+                        }
+                    }
+                }
+
+                return closest;
             }
         }
+
 
         /// <summary>
         /// Implementation of <see cref="ITransformer.EndTransform"/>; for details, please refer to the related documentation
@@ -255,6 +308,7 @@ namespace Oculus.Interaction
             marker.GetComponent<Renderer>().enabled = false;
             SnapTransformToGrid(_grabbable.Transform);
             SnapTransformToGround(_grabbable.Transform, collider);
+            ResolveWallPenetration(_grabbable.Transform, collider);
         }
 
         internal static void InitializeDeltas(int count, List<Pose> poses, ref GrabPointDelta[] deltas)

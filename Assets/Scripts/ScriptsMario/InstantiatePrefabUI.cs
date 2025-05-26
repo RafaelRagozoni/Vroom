@@ -19,7 +19,7 @@ public class InstantiatePrefabUI : MonoBehaviour
     public List<GameObject> TableList;
 
 
-    private float r = 1.0f;
+    private float r = 1.5f;
     private float x_position;
     private float z_position;
     
@@ -92,6 +92,7 @@ public class InstantiatePrefabUI : MonoBehaviour
                 Vector3 cameraPosXZ = new Vector3(sceneCamera.transform.position.x, position.y, sceneCamera.transform.position.z);
                 Vector3 directionToCamera = cameraPosXZ - position;
                 Quaternion rotation = Quaternion.LookRotation(directionToCamera);
+
 
                 GameObject prefab = GetComponent<FurnitureSpawner>().SpawnPrefab(FurnitureCategories[i],position,rotation);//Instantiate(FurnitureCategories[i], position, rotation);
 

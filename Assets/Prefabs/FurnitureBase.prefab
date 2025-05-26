@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: 1
+  gridSize: 0.001
   rayStart: 0.1
   righHandInteractor: {fileID: 0}
   leftHandInteractor: {fileID: 0}

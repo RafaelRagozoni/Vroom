@@ -6,6 +6,10 @@ public class TextureClickManager : MonoBehaviour
     public Transform target;
     private int ChunkSize;
 
+    private float lastClickTime = 0f;
+    private float clickThreshold = 0.3f; // Tempo entre cliques para considerar duplo clique
+    private bool oneClickPending = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,7 +31,40 @@ public class TextureClickManager : MonoBehaviour
         }
     }
 
+
     private void HandleClick()
+    {
+        float currentTime = Time.time;
+
+        if (currentTime - lastClickTime < clickThreshold)
+        {
+            // Clique duplo
+            oneClickPending = false;
+            lastClickTime = 0f;
+            CancelInvoke(nameof(TriggerSingleClick)); // Cancela o clique único, se estava agendado
+            TriggerDoubleClick();
+        }
+        else
+        {
+            // Possível clique único, espera um pouco pra ver se vem outro
+            oneClickPending = true;
+            lastClickTime = currentTime;
+            Invoke(nameof(TriggerSingleClick), clickThreshold);
+        }
+    }
+
+    private void TriggerSingleClick()
+    {
+        if (oneClickPending)
+        {
+            oneClickPending = false;
+            if (DeleteManager.Instance.DeleteMode)
+            {
+               
+            }
+        }
+    }
+    private void TriggerDoubleClick()
     {
         target = transform.parent;
         InstantiateTexturesUI.Instance.selectedTarget = transform.parent;
