@@ -27,7 +27,7 @@ public class TextureClickManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("RayInteractable não encontrado!");
+            Debug.LogError("RayInteractable nï¿½o encontrado!");
         }
     }
 
@@ -41,12 +41,12 @@ public class TextureClickManager : MonoBehaviour
             // Clique duplo
             oneClickPending = false;
             lastClickTime = 0f;
-            CancelInvoke(nameof(TriggerSingleClick)); // Cancela o clique único, se estava agendado
+            CancelInvoke(nameof(TriggerSingleClick)); // Cancela o clique ï¿½nico, se estava agendado
             TriggerDoubleClick();
         }
         else
         {
-            // Possível clique único, espera um pouco pra ver se vem outro
+            // Possï¿½vel clique ï¿½nico, espera um pouco pra ver se vem outro
             oneClickPending = true;
             lastClickTime = currentTime;
             Invoke(nameof(TriggerSingleClick), clickThreshold);
@@ -70,6 +70,10 @@ public class TextureClickManager : MonoBehaviour
         InstantiateTexturesUI.Instance.selectedTarget = transform.parent;
         Debug.Log("Clicou no objeto: " + target.name);
         InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
+        InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
+        DeleteManager.Instance.DeactivateDeletionMode();
+        EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
+
         InstantiateTexturesUI.Instance.TextureEditMode = true;
         if (target.CompareTag("wall"))
         {

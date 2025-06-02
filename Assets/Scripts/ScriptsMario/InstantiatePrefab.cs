@@ -21,10 +21,10 @@ public class InstantiatePrefab : MonoBehaviour
     {
         var child = prefab.transform.Find("ISDK_RayGrabInteraction").gameObject;
 
-        var transformer = child.GetComponent<GrabFreeTransformer>();
+        var transformer = child.GetComponent<FurnitureGrabTransformer>();
         if (transformer == null)
         {
-            transformer = child.AddComponent<GrabFreeTransformer>();
+            transformer = child.AddComponent<FurnitureGrabTransformer>();
         }
         transformer.gridSize = gridSize;
         transformer.righHandInteractor = rayInteractor;
@@ -69,12 +69,12 @@ public class InstantiatePrefab : MonoBehaviour
     //    //Quaternion rotation = Quaternion.identity;
     //    var obj = Instantiate(prefab, position, prefab.gameObject.transform.rotation);
 
-    //    // Adiciona Rigidbody se não tiver
+    //    // Adiciona Rigidbody se nï¿½o tiver
     //    if (!obj.TryGetComponent<Rigidbody>(out var rb))
     //    {
     //        rb = obj.AddComponent<Rigidbody>();
     //    }
-    //    // Desativa o isKinematic para garantir que a física vai funcionar
+    //    // Desativa o isKinematic para garantir que a fï¿½sica vai funcionar
     //    rb.isKinematic = false;
 
     //    // Ativa a gravidade

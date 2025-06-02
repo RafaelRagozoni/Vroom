@@ -32,12 +32,13 @@ public class CategoriesObjectClickManager : MonoBehaviour
     private void HandleClick()
     {
         Transform target = transform.parent;
-        
+        //EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
         //Adicione aqui o que deve acontecer ao clicar no objeto
         // Exemplo:
         InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
         InstantiatePrefabUI.Instance.InstantiateFurnitureMode = true;
         InstantiatePrefabUI.Instance.CategoriesAddFurnitureMode = false;
+        EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
         Debug.Log("Objeto clicado: " + target.name);
         if(target.CompareTag("ChairListTag"))
         {

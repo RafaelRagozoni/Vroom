@@ -13,6 +13,8 @@ public class FurnitureSpawner : MonoBehaviour
     public RayInteractor leftHandInteractor;
 
     public float scale = 1.0f;
+    [SerializeField] private GameObject prefabParaInstanciar;
+    [SerializeField] private Camera sceneCamera;
 
     public GameObject SpawnPrefab(GameObject model, Vector3 position, Quaternion rotation)
     {
@@ -26,7 +28,7 @@ public class FurnitureSpawner : MonoBehaviour
             modelInstance.transform.SetParent(furniturePrefabInstance.transform);
 
             SetupInteractors(furniturePrefabInstance);
-
+            SetupDoubleClick(furniturePrefabInstance);
             furniturePrefabInstance.transform.localScale = new Vector3(scale, scale, scale);
 
             var modelCollider = modelInstance.GetComponent<BoxCollider>();
@@ -71,7 +73,7 @@ public class FurnitureSpawner : MonoBehaviour
 
         if (rayGrabInteractor != null)
         {
-            var transformer = rayGrabInteractor.GetComponent<GrabFreeTransformer>();
+            var transformer = rayGrabInteractor.GetComponent<FurnitureGrabTransformer>();
 
             transformer.leftHandInteractor = leftHandInteractor;
             transformer.righHandInteractor = righHandInteractor;
@@ -86,7 +88,22 @@ public class FurnitureSpawner : MonoBehaviour
         }
     }
 
+    private void SetupDoubleClick(GameObject furniturePrefabInstance)
+    {
+        var rayGrabInteractor = furniturePrefabInstance.transform.Find("ISDK_RayGrabInteraction");
 
+        if (rayGrabInteractor != null)
+        {
+            var ObjectClickManager = rayGrabInteractor.GetComponent<ObjectClickManager>();
+            ObjectClickManager.Editprefab = prefabParaInstanciar;
+            ObjectClickManager.sceneCamera = sceneCamera;
+        }
+        else
+        {
+            Debug.LogError("ISDK_RayGrabInteraction not found!");
+        }
+
+    }
     public static BoxCollider GetChildrenBounds(GameObject target)
     {
         if (target == null)
@@ -105,7 +122,7 @@ public class FurnitureSpawner : MonoBehaviour
 
         foreach (Renderer rend in allRenderers)
         {
-            // Skip the target object’s own renderer (if needed)
+            // Skip the target objectï¿½s own renderer (if needed)
             //if (rend.transform == target.transform)
             //    continue;
 
