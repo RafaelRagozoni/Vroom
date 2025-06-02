@@ -14,7 +14,7 @@ public class FurnitureSpawner : MonoBehaviour
 
     public float scale = 1.0f;
 
-    public GameObject SpawnPrefab(GameObject model, Vector3 position, Quaternion rotation)
+    public GameObject SpawnPrefab(GameObject model, Vector3 position, Quaternion rotation, FurnitureType type = FurnitureType.Floor)
     {
         if (furniturePrefab != null)
         {
@@ -25,7 +25,7 @@ public class FurnitureSpawner : MonoBehaviour
 
             modelInstance.transform.SetParent(furniturePrefabInstance.transform);
 
-            SetupInteractors(furniturePrefabInstance);
+            SetupInteractors(furniturePrefabInstance, type);
 
             furniturePrefabInstance.transform.localScale = new Vector3(scale, scale, scale);
 
@@ -65,16 +65,17 @@ public class FurnitureSpawner : MonoBehaviour
     }
 
 
-    private void SetupInteractors(GameObject furniturePrefabInstance)
+    private void SetupInteractors(GameObject furniturePrefabInstance, FurnitureType type)
     {
         var rayGrabInteractor = furniturePrefabInstance.transform.Find("ISDK_RayGrabInteraction");
 
         if (rayGrabInteractor != null)
         {
-            var transformer = rayGrabInteractor.GetComponent<GrabFreeTransformer>();
+            var transformer = rayGrabInteractor.GetComponent<FurnitureGrabTransform>();
 
             transformer.leftHandInteractor = leftHandInteractor;
             transformer.righHandInteractor = righHandInteractor;
+            transformer.type = type;
 
             var colliderSurface = rayGrabInteractor.GetComponent<ColliderSurface>();
 
