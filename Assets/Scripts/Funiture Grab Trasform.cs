@@ -149,7 +149,6 @@ namespace Oculus.Interaction
             int count = _grabbable.GrabPoints.Count;
             Transform targetTransform = _grabbable.Transform;
 
-            RotateTransformWithInteractor(targetTransform);
 
             var targetCollider = targetTransform.GetComponentInParent<Collider>();
 
@@ -157,6 +156,11 @@ namespace Oculus.Interaction
             if (hit.HasValue)
             {
                 var surfaceNormal = hit.Value.normal;
+
+                if (this.type == FurnitureType.Floor && !(Vector3.Dot(surfaceNormal, Vector3.up) > 0.99))
+                {
+                    return;
+                }
                 Debug.Log("Hit point: " + hit.Value.point.ToString());
                 SnapTransformToSurface(targetTransform, targetCollider, surfaceNormal);
                 //SnapTransformToGrid(marker.transform);
@@ -168,6 +172,8 @@ namespace Oculus.Interaction
                 targetCollider.enabled = true;
 
             }
+
+            //RotateTransformWithInteractor(targetTransform.GetChild(2));
         }
 
         private void ResolveWallPenetration(Transform targetTransform, Collider collider)
@@ -323,22 +329,15 @@ namespace Oculus.Interaction
 
             static void AlignWithVector(Transform transform, Vector3 surfaceNormal, Vector3? forwardHint = null)
             {
-                // Ensure normal is normalized
-                surfaceNormal.Normalize();
-
-                // Optional forward direction to help control twisting around the normal
-                Vector3 forward = forwardHint.HasValue ? forwardHint.Value : Vector3.forward;
-
-                // If forward is nearly parallel to normal, pick a different one
-                if (Mathf.Abs(Vector3.Dot(forward, surfaceNormal)) > 0.99f)
+                if (Math.Abs(Vector3.Dot(transform.up, surfaceNormal)) < 0.01f)
                 {
-                    forward = Vector3.right;
+                    var right = Vector3.Cross(transform.up, surfaceNormal);
+                    var forward = Vector3.Cross(surfaceNormal, right);
+                    // Calculate a rotation where the Y-axis points along the surface normal
+                    Quaternion rotation = Quaternion.LookRotation(forward, surfaceNormal);
+
+                    transform.rotation = rotation;
                 }
-
-                // Calculate a rotation where the Y-axis points along the surface normal
-                Quaternion rotation = Quaternion.LookRotation(Vector3.Cross(forward, surfaceNormal), surfaceNormal);
-
-                transform.rotation = rotation;
             }
         }
 

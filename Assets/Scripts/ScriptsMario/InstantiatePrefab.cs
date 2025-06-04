@@ -21,10 +21,10 @@ public class InstantiatePrefab : MonoBehaviour
     {
         var child = prefab.transform.Find("ISDK_RayGrabInteraction").gameObject;
 
-        var transformer = child.GetComponent<GrabFreeTransformer>();
+        var transformer = child.GetComponent<FurnitureGrabTransform>();
         if (transformer == null)
         {
-            transformer = child.AddComponent<GrabFreeTransformer>();
+            transformer = child.AddComponent<FurnitureGrabTransform>();
         }
         transformer.gridSize = gridSize;
         transformer.righHandInteractor = rayInteractor;
