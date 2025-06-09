@@ -59,15 +59,15 @@ public class Slider3D : MonoBehaviour
             {
                 objetoParaEscalar.localScale = Vector3.one * valorMapeado;
             }
-            // --- AJUSTE DE ALTURA ---
-            Renderer rend = objetoParaEscalar.GetComponentInChildren<Renderer>();
-            if (rend != null)
-            {
-                float novaAltura = rend.bounds.size.y;
-                Vector3 pos = objetoParaEscalar.position;
-                pos.y = novaAltura / 2f;
-                objetoParaEscalar.position = pos;
-            }
+            // // --- AJUSTE DE ALTURA ---
+            // Renderer rend = objetoParaEscalar.GetComponentInChildren<Renderer>();
+            // if (rend != null)
+            // {
+            //     float novaAltura = rend.bounds.size.y;
+            //     Vector3 pos = objetoParaEscalar.position;
+            //     pos.y = novaAltura / 2f;
+            //     objetoParaEscalar.position = pos;
+            // }
         }
     }
 }

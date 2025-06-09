@@ -8,6 +8,9 @@ public class CategoriesObjectClickManager : MonoBehaviour
     private Grabbable grabbable;
     private int ChunkSize;
     public int index = 0;
+
+    public string FurnitureModelPrefabPath { get; set; }
+
     private void Start()
     {
         grabbable = GetComponent<Grabbable>();
@@ -25,7 +28,7 @@ public class CategoriesObjectClickManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("RayInteractable não encontrado!");
+            Debug.LogError("RayInteractable nï¿½o encontrado!");
         }
     }
 

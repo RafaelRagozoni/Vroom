@@ -4,6 +4,7 @@ using UnityEngine;
 public class InstantiateObjectClickManager : MonoBehaviour
 {
     private Grabbable grabbable;
+    public string FurnitureModelPrefabPath { get; set; }
     private void Start()
     {
         grabbable = GetComponent<Grabbable>();
@@ -21,7 +22,7 @@ public class InstantiateObjectClickManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("RayInteractable não encontrado!");
+            Debug.LogError("RayInteractable nï¿½o encontrado!");
         }
     }
 
@@ -41,11 +42,11 @@ public class InstantiateObjectClickManager : MonoBehaviour
             OriginalPrefabHolder holder = target.GetComponent<OriginalPrefabHolder>();
             if (holder == null || holder.originalPrefab == null)
             {
-                Debug.LogError("OriginalPrefabHolder não encontrado ou prefab não atribuído!");
+                Debug.LogError("OriginalPrefabHolder nï¿½o encontrado ou prefab nï¿½o atribuï¿½do!");
                 return;
             }
 
-            GameObject newObject = InstantiatePrefab.Instance.InstantiateObject(holder.originalPrefab);
+            GameObject newObject = InstantiatePrefab.Instance.InstantiateObject(FurnitureModelPrefabPath);
 
             // Remove managers indesejados
             var componentsToRemove = newObject.GetComponentsInChildren<InstantiateObjectClickManager>(true);

@@ -1,6 +1,6 @@
 using UnityEngine;
 using Oculus.Interaction;
-
+using Bhaptics.SDK2;
 public class ObjectClickManager : MonoBehaviour
 {
     private Renderer parentRenderer;
@@ -65,6 +65,13 @@ public class ObjectClickManager : MonoBehaviour
                 // Modo de dele��o
                 Debug.Log("Deletando objeto: " + transform.parent.name);
                 Destroy(transform.parent.gameObject);
+                Debug.Log("Tentando tocar evento Bhaptics: teste_aula");
+                BhapticsLibrary.Play("teste_aula",0,      // Delay Time (millisecond)
+            1.0f,   // Haptic intensity
+            1.0f,   // Haptic duration
+            20.0f,  // Rotate haptic around global Vector3.up (0f - 360f)
+            0.3f    // Move haptic up or down (-0.5f - 0.5f)
+        );
             }
             EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
 
@@ -84,7 +91,13 @@ public class ObjectClickManager : MonoBehaviour
             if (Editprefab != null)
             {
                 Transform target = transform.parent;
-                EditFurnitureManager.Instance.selectedTarget = target;
+                Transform model= target.Find("raw_model(Clone)");
+                if (model == null)
+                {
+                   Debug.LogError("Modelo filho não encontrado!");
+                }
+
+                EditFurnitureManager.Instance.selectedTarget = model;
                 // Tenta obter a altura do objeto via Collider
                 Collider collider = target.GetComponent<Collider>();
                 Vector3 posicaoAcima;

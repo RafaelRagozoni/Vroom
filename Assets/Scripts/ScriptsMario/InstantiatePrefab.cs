@@ -90,7 +90,7 @@ public class InstantiatePrefab : MonoBehaviour
 
     //}
 
-    public GameObject InstantiateObject(GameObject prefab)
+    public GameObject InstantiateObject(string pathPrefab)
     {
         if (!canClick) return null;
 
@@ -100,8 +100,9 @@ public class InstantiatePrefab : MonoBehaviour
         Debug.Log("Clique detectado!");
 
         Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
+    
         //var obj = Instantiate(prefab, position, prefab.transform.rotation);
-        var obj = GetComponent<FurnitureSpawner>().SpawnPrefab(prefab, position, prefab.transform.rotation);
+        var obj = GetComponent<FurnitureSpawner>().SpawnPrefab(pathPrefab, position, Quaternion.identity);
 
         if (!obj.TryGetComponent<Rigidbody>(out var rb))
             rb = obj.AddComponent<Rigidbody>();
