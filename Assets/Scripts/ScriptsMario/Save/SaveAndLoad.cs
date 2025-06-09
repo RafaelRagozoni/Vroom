@@ -1,9 +1,20 @@
+using System;
 using System.Collections.Generic;
 using Meta.WitAi.Json;
 using UnityEngine;
 
 public class SaveAndLoad : MonoBehaviour
 {
+    // Room Objects
+    public GameObject wallR;
+    public GameObject wallL;
+    public GameObject wallB;
+    public GameObject wallF;
+    public GameObject ceiling;
+    public GameObject floor;
+
+    
+
     [System.Serializable]
     public class InstancedFurnitureData
     {
@@ -13,9 +24,19 @@ public class SaveAndLoad : MonoBehaviour
         public string FurnitureModelPath;
     }
     [System.Serializable]
+    public class RoomData
+    {
+        public Vector3 GizmosPosition; // Position of the Gizmo in the room
+
+        public string[] Materials = new string[6]; // Paths of Materials for each wall and floor
+        // 0: Floor, 1: Ceiling, 2: Wall Left, 3: Wall Right, 4: Wall Front, 5: Wall Back
+
+    }
+    [System.Serializable]
     public class SceneData
     {
         public List<InstancedFurnitureData> InstancedFurnitures = new List<InstancedFurnitureData>();
+        public RoomData RoomData = new RoomData(); // Data for the room
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -53,6 +74,17 @@ public class SaveAndLoad : MonoBehaviour
                 sceneData.InstancedFurnitures.Add(data);
             }
         }
+        //Saving Room Data
+        sceneData.RoomData.Materials[0] = floor.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.Materials[1] = ceiling.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.Materials[2] = wallL.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.Materials[3] = wallR.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.Materials[4] = wallF.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.Materials[5] = wallB.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        // Saving Gizmo Position
+        sceneData.RoomData.GizmosPosition = GetComponent<RoomReshaper>().GetGizmoPosition();
+
+
         string json = JsonUtility.ToJson(sceneData, true); // 'true' para formatar bonito
         System.IO.File.WriteAllText(Application.persistentDataPath + "/sceneData.json", json);
         Debug.Log(Application.persistentDataPath);
@@ -86,6 +118,19 @@ public class SaveAndLoad : MonoBehaviour
                 }
             }
             Debug.Log("Scene data loaded successfully.");
+
+            // Load Room Data
+            GetComponent<RoomReshaper>().MoveGizmos(sceneData.RoomData.GizmosPosition);
+            // Apply Materials to Walls and Floor
+            var materialsPathDict = GetComponent<MaterialsPathDict>();
+    
+            floor.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[0]));
+            ceiling.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[1]));
+            wallL.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[2]));
+            wallR.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[3]));
+            wallF.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[4]));
+            wallB.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[5]));
+
         }
         else
         {

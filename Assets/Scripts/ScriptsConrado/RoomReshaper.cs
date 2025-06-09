@@ -33,6 +33,18 @@ public class RoomReshaper : MonoBehaviour
         Remodelate();
     }
 
+    public void MoveGizmos(Vector3 Positions)
+    {
+        gizmoX.transform.position = new Vector3(Positions.x, gizmoX.transform.position.y, gizmoX.transform.position.z);
+        gizmoY.transform.position = new Vector3(gizmoY.transform.position.x, Positions.y, gizmoY.transform.position.z);
+        gizmoZ.transform.position = new Vector3(gizmoZ.transform.position.x, gizmoZ.transform.position.y, Positions.z);
+    }
+
+    public Vector3 GetGizmoPosition()
+    {
+        return new Vector3(gizmoX.transform.position.x, gizmoY.transform.position.y, gizmoZ.transform.position.z);
+    }
+
     void Remodelate()
     {
         float deltaGizmoY = gizmoY.transform.position.y - originalGizmoY;

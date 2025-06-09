@@ -22,7 +22,7 @@ public class ChangeTextureClickManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("RayInteractable não encontrado!");
+            Debug.LogError("RayInteractable nï¿½o encontrado!");
         }
     }
 
@@ -43,9 +43,9 @@ public class ChangeTextureClickManager : MonoBehaviour
         Renderer clickedTargetRenderer = objectClickedTarget.GetComponent<Renderer>();
 
         if (targetRenderer == null)
-            Debug.LogWarning("targetRenderer é NULL! Objeto: " + transform.parent.name);
+            Debug.LogWarning("targetRenderer ï¿½ NULL! Objeto: " + transform.parent.name);
         if (clickedTargetRenderer == null)
-            Debug.LogWarning("clickedTargetRenderer é NULL! Objeto: " + objectClickedTarget.name);
+            Debug.LogWarning("clickedTargetRenderer ï¿½ NULL! Objeto: " + objectClickedTarget.name);
         
         Debug.Log("Antes");
         if (targetRenderer != null && clickedTargetRenderer != null)
@@ -55,7 +55,7 @@ public class ChangeTextureClickManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Renderer não encontrado em um dos objetos.");
+            Debug.LogWarning("Renderer nï¿½o encontrado em um dos objetos.");
         }
         Debug.Log("Depois");
         InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
