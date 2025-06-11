@@ -4,6 +4,7 @@ using UnityEngine;
 public class InstantiateObjectClickManager : MonoBehaviour
 {
     private Grabbable grabbable;
+    public string FurnitureModelPrefabPath { get; set; }
     private void Start()
     {
         grabbable = GetComponent<Grabbable>();
@@ -21,49 +22,16 @@ public class InstantiateObjectClickManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("RayInteractable não encontrado!");
+            Debug.LogError("RayInteractable nï¿½o encontrado!");
         }
     }
-
-    //private void HandleClick()
-    //{
-    //    Transform target = transform.parent;
-
-    //    // Adicione aqui o que deve acontecer ao clicar no objeto
-    //    InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
-    //    InstantiatePrefabUI.Instance.InstantiateFurnitureMode = false;
-    //    Debug.Log("Objeto clicado: " + target.name);
-
-    //    if (target.CompareTag("ChairListTag"))
-    //    {
-    //        Debug.Log("Entrou na tag");
-
-    //        // Instancia o objeto e guarda a referência
-    //        GameObject newObject = InstantiatePrefab.Instance.InstantiateObject(target.gameObject);
-
-    //        // Remove todos os InstantiateObjectClickManager do objeto instanciado e seus filhos
-    //        var componentsToRemove = newObject.GetComponentsInChildren<InstantiateObjectClickManager>(true);
-    //        foreach (var comp in componentsToRemove)
-    //        {
-    //            Destroy(comp);
-    //            Debug.Log("Removido InstantiateObjectClickManager de " + comp.gameObject.name);
-    //        }
-
-    //        // Ativa o componente Grabbable no objeto instanciado
-    //        var grabbable = newObject.GetComponentInChildren<Grabbable>(true);
-    //        if (grabbable != null)
-    //        {
-    //            grabbable.enabled = true; // Habilita o componente Grabbable
-    //            Debug.Log($"Ativado Grabbable no filho de {newObject.name}");
-    //        }
-    //    }
-    //}
 
     private void HandleClick()
     {
         Transform target = transform.parent;
 
         InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
+        EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
         InstantiatePrefabUI.Instance.InstantiateFurnitureMode = false;
 
         Debug.Log("Objeto clicado: " + target.name);
@@ -74,11 +42,11 @@ public class InstantiateObjectClickManager : MonoBehaviour
             OriginalPrefabHolder holder = target.GetComponent<OriginalPrefabHolder>();
             if (holder == null || holder.originalPrefab == null)
             {
-                Debug.LogError("OriginalPrefabHolder não encontrado ou prefab não atribuído!");
+                Debug.LogError("OriginalPrefabHolder nï¿½o encontrado ou prefab nï¿½o atribuï¿½do!");
                 return;
             }
 
-            GameObject newObject = InstantiatePrefab.Instance.InstantiateObject(holder.originalPrefab);
+            GameObject newObject = InstantiatePrefab.Instance.InstantiateObject(FurnitureModelPrefabPath);
 
             // Remove managers indesejados
             var componentsToRemove = newObject.GetComponentsInChildren<InstantiateObjectClickManager>(true);

@@ -8,6 +8,9 @@ public class CategoriesObjectClickManager : MonoBehaviour
     private Grabbable grabbable;
     private int ChunkSize;
     public int index = 0;
+
+    public string FurnitureModelPrefabPath { get; set; }
+
     private void Start()
     {
         grabbable = GetComponent<Grabbable>();
@@ -25,19 +28,20 @@ public class CategoriesObjectClickManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("RayInteractable não encontrado!");
+            Debug.LogError("RayInteractable nï¿½o encontrado!");
         }
     }
 
     private void HandleClick()
     {
         Transform target = transform.parent;
-        
+        //EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
         //Adicione aqui o que deve acontecer ao clicar no objeto
         // Exemplo:
         InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
         InstantiatePrefabUI.Instance.InstantiateFurnitureMode = true;
         InstantiatePrefabUI.Instance.CategoriesAddFurnitureMode = false;
+        EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
         Debug.Log("Objeto clicado: " + target.name);
         if(target.CompareTag("ChairListTag"))
         {

@@ -29,7 +29,7 @@ public class OpenRoomEditMode : MonoBehaviour
         // Faz a camera fica na posição de cima 
         if (dentro)
         {
-            sceneCamera.transform.position = new Vector3(-10, 35, -10);
+            sceneCamera.transform.position = new Vector3(20, 25,20);
             rayInteractorRight.MaxRayLength = 100;
             rayInteractorLeft.MaxRayLength = 100;
             oculusCursorRight.transform.localScale = new Vector3(0.5f, 0.5f, 1f);

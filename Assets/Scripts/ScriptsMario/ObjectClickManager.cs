@@ -1,6 +1,6 @@
 using UnityEngine;
 using Oculus.Interaction;
-
+using Bhaptics.SDK2;
 public class ObjectClickManager : MonoBehaviour
 {
     private Renderer parentRenderer;
@@ -9,7 +9,8 @@ public class ObjectClickManager : MonoBehaviour
     private bool oneClickPending = false;
 
     private Grabbable grabbable;
-
+    public Camera sceneCamera;
+    public GameObject Editprefab;
     private void Start()
     {
         grabbable = GetComponent<Grabbable>();
@@ -29,7 +30,7 @@ public class ObjectClickManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("RayInteractable não encontrado!");
+            Debug.LogError("RayInteractable nï¿½o encontrado!");
         }
     }
 
@@ -42,12 +43,12 @@ public class ObjectClickManager : MonoBehaviour
             // Clique duplo
             oneClickPending = false;
             lastClickTime = 0f;
-            CancelInvoke(nameof(TriggerSingleClick)); // Cancela o clique único, se estava agendado
+            CancelInvoke(nameof(TriggerSingleClick)); // Cancela o clique ï¿½nico, se estava agendado
             TriggerDoubleClick();
         }
         else
         {
-            // Possível clique único, espera um pouco pra ver se vem outro
+            // Possï¿½vel clique ï¿½nico, espera um pouco pra ver se vem outro
             oneClickPending = true;
             lastClickTime = currentTime;
             Invoke(nameof(TriggerSingleClick), clickThreshold);
@@ -59,36 +60,67 @@ public class ObjectClickManager : MonoBehaviour
         if (oneClickPending)
         {
             oneClickPending = false;
-            if(DeleteManager.Instance.DeleteMode)
+            if (DeleteManager.Instance.DeleteMode)
             {
-                // Modo de deleção
+                // Modo de deleï¿½ï¿½o
                 Debug.Log("Deletando objeto: " + transform.parent.name);
                 Destroy(transform.parent.gameObject);
+                Debug.Log("Tentando tocar evento Bhaptics: teste_aula");
+                BhapticsLibrary.Play("teste_aula",0,      // Delay Time (millisecond)
+            1.0f,   // Haptic intensity
+            1.0f,   // Haptic duration
+            20.0f,  // Rotate haptic around global Vector3.up (0f - 360f)
+            0.3f    // Move haptic up or down (-0.5f - 0.5f)
+        );
             }
-            
-            //ObjectEditorUI.Instance.CloseEditor();
+            EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
+
         }
     }
 
     private void TriggerDoubleClick()
     {
-        Debug.Log("Duplo clique detectado!");
-
-        Transform target = transform.parent;
-
-        //Tenta obter a altura do objeto via Collider
-        Collider collider = target.GetComponent<Collider>();
-        if (collider != null)
+        Debug.Log("Duplo clique detectado no objeto!");
+        InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
+        InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
+        DeleteManager.Instance.DeactivateDeletionMode();
+        EditFurnitureManager.Instance.selectedTarget = null;///////////////
+        if (EditFurnitureManager.Instance.EditFunitureMode == false)
         {
-            float altura = collider.bounds.size.y;
-            Vector3 posicaoUI = target.position + new Vector3(0, altura + 0.1f, 0);
-            ObjectEditorUI.Instance.OpenEditor(target.gameObject, posicaoUI);
-        }
-        else
-        {
-            Debug.LogWarning("Nenhum Collider encontrado para calcular a altura.");
-            Vector3 fallbackPosition = target.position + new Vector3(0, 0.5f, 0);
-            ObjectEditorUI.Instance.OpenEditor(target.gameObject, fallbackPosition);
+
+            if (Editprefab != null)
+            {
+                Transform target = transform.parent;
+                Transform model= target.Find("raw_model(Clone)");
+                if (model == null)
+                {
+                   Debug.LogError("Modelo filho nÃ£o encontrado!");
+                }
+
+                EditFurnitureManager.Instance.selectedTarget = model;
+                // Tenta obter a altura do objeto via Collider
+                Collider collider = target.GetComponent<Collider>();
+                Vector3 posicaoAcima;
+                if (collider != null)
+                {
+                    float altura = collider.bounds.size.y;
+                    posicaoAcima = target.position + new Vector3(0, altura + 0.3f, 0); // 0.1f para evitar sobreposiï¿½ï¿½o
+                }
+                else
+                {
+                    Debug.LogWarning("Nenhum Collider encontrado para calcular a altura. Usando valor padrï¿½o.");
+                    posicaoAcima = target.position + new Vector3(0, 0.5f, 0);
+                }
+
+                Quaternion rotacao = Quaternion.identity; // Sem rotaï¿½ï¿½o especï¿½fica, ajuste se necessï¿½rio
+                EditFurnitureManager.Instance.ActivateEditFurnitureMode(posicaoAcima, rotacao);
+                //Instantiate(Editprefab, posicaoAcima, rotacao);
+                Debug.Log("Prefab instanciado acima do mï¿½vel.");
+            }
+            else
+            {
+                Debug.LogWarning("Prefab para instanciar nï¿½o estï¿½ atribuï¿½do!");
+            }
         }
     }
 

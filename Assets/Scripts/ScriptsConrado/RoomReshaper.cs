@@ -1,4 +1,5 @@
 using Meta.Voice;
+using TMPro;
 using UnityEngine;
 
 public class RoomReshaper : MonoBehaviour
@@ -12,6 +13,9 @@ public class RoomReshaper : MonoBehaviour
     public GameObject gizmoX;
     public GameObject gizmoY;
     public GameObject gizmoZ;
+    public TextMeshPro xText;
+    public TextMeshPro yText;
+    public TextMeshPro zText;
     private float originalGizmoX;
     private float originalGizmoY;
     private float originalGizmoZ;
@@ -27,6 +31,18 @@ public class RoomReshaper : MonoBehaviour
     void Update()
     {
         Remodelate();
+    }
+
+    public void MoveGizmos(Vector3 Positions)
+    {
+        gizmoX.transform.position = new Vector3(Positions.x, gizmoX.transform.position.y, gizmoX.transform.position.z);
+        gizmoY.transform.position = new Vector3(gizmoY.transform.position.x, Positions.y, gizmoY.transform.position.z);
+        gizmoZ.transform.position = new Vector3(gizmoZ.transform.position.x, gizmoZ.transform.position.y, Positions.z);
+    }
+
+    public Vector3 GetGizmoPosition()
+    {
+        return new Vector3(gizmoX.transform.position.x, gizmoY.transform.position.y, gizmoZ.transform.position.z);
     }
 
     void Remodelate()
@@ -115,6 +131,10 @@ public class RoomReshaper : MonoBehaviour
         originalGizmoX = gizmoX.transform.position.x;
         originalGizmoY = gizmoY.transform.position.y;
         originalGizmoZ = gizmoZ.transform.position.z;
+        xText.text = (originalGizmoX - 11).ToString("F2") + "m";
+        yText.text = (originalGizmoY - 15).ToString("F2") + "m";
+        zText.text = (originalGizmoZ - 11).ToString("F2") + "m";
+
     }
 
 

@@ -21,10 +21,10 @@ public class InstantiatePrefab : MonoBehaviour
     {
         var child = prefab.transform.Find("ISDK_RayGrabInteraction").gameObject;
 
-        var transformer = child.GetComponent<FurnitureGrabTransform>();
+        var transformer = child.GetComponent<FurnitureGrabTransformer>();
         if (transformer == null)
         {
-            transformer = child.AddComponent<FurnitureGrabTransform>();
+            transformer = child.AddComponent<FurnitureGrabTransformer>();
         }
         transformer.gridSize = gridSize;
         transformer.righHandInteractor = rayInteractor;
@@ -69,12 +69,12 @@ public class InstantiatePrefab : MonoBehaviour
     //    //Quaternion rotation = Quaternion.identity;
     //    var obj = Instantiate(prefab, position, prefab.gameObject.transform.rotation);
 
-    //    // Adiciona Rigidbody se não tiver
+    //    // Adiciona Rigidbody se nï¿½o tiver
     //    if (!obj.TryGetComponent<Rigidbody>(out var rb))
     //    {
     //        rb = obj.AddComponent<Rigidbody>();
     //    }
-    //    // Desativa o isKinematic para garantir que a física vai funcionar
+    //    // Desativa o isKinematic para garantir que a fï¿½sica vai funcionar
     //    rb.isKinematic = false;
 
     //    // Ativa a gravidade
@@ -90,7 +90,7 @@ public class InstantiatePrefab : MonoBehaviour
 
     //}
 
-    public GameObject InstantiateObject(GameObject prefab)
+    public GameObject InstantiateObject(string pathPrefab)
     {
         if (!canClick) return null;
 
@@ -100,8 +100,9 @@ public class InstantiatePrefab : MonoBehaviour
         Debug.Log("Clique detectado!");
 
         Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
+    
         //var obj = Instantiate(prefab, position, prefab.transform.rotation);
-        var obj = GetComponent<FurnitureSpawner>().SpawnPrefab(prefab, position, prefab.transform.rotation);
+        var obj = GetComponent<FurnitureSpawner>().SpawnPrefab(pathPrefab, position, Quaternion.identity);
 
         if (!obj.TryGetComponent<Rigidbody>(out var rb))
             rb = obj.AddComponent<Rigidbody>();

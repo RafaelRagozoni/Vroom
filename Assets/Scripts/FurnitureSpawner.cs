@@ -1,32 +1,54 @@
 using Oculus.Interaction;
 using Oculus.Interaction.Surfaces;
 using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 public class FurnitureSpawner : MonoBehaviour
 {
+    public class FurnitureData
+    {
+        public int FurnitureBaseId;
+        public int ModelId;
+    }
+
+    public List<FurnitureData> InstantiatedFurnitureIds = new List<FurnitureData>();
     public GameObject furniturePrefab;
 
     public RayInteractor righHandInteractor;
     public RayInteractor leftHandInteractor;
 
     public float scale = 1.0f;
+    [SerializeField] private GameObject prefabParaInstanciar;
+    [SerializeField] private Camera sceneCamera;
 
-    public GameObject SpawnPrefab(GameObject model, Vector3 position, Quaternion rotation, FurnitureType type = FurnitureType.Floor)
+    public Dictionary<int,string> InstantiatedFurniturePaths = new Dictionary<int,string>();
+
+    public GameObject SpawnPrefab(string pathPrefab, Vector3 position, Quaternion rotation)
     {
-        if (furniturePrefab != null)
+        // Load the prefab from the specified path (runtime safe)
+        GameObject model = Resources.Load<GameObject>(pathPrefab);
+        if (model == null)
         {
+            Debug.LogError($"Prefab not found at Resources path: {pathPrefab}");
+            throw new Exception($"Prefab not found at Resources path: {pathPrefab}");
+        }
+
+        if (furniturePrefab != null)
+        { 
             var furniturePrefabInstance = Instantiate(furniturePrefab, position, rotation);
             var modelInstance = Instantiate(model, position, rotation);
+
+            InstantiatedFurniturePaths[furniturePrefabInstance.GetInstanceID()] = pathPrefab;
 
             SetupCollider(furniturePrefabInstance, modelInstance);
 
             modelInstance.transform.SetParent(furniturePrefabInstance.transform);
 
-            SetupInteractors(furniturePrefabInstance, type);
-
+            SetupInteractors(furniturePrefabInstance);
+            SetupDoubleClick(furniturePrefabInstance);
             furniturePrefabInstance.transform.localScale = new Vector3(scale, scale, scale);
 
             var modelCollider = modelInstance.GetComponent<BoxCollider>();
@@ -45,7 +67,15 @@ public class FurnitureSpawner : MonoBehaviour
                 furniturePrefabInstance.tag = "Furniture";
             }
 
-                return furniturePrefabInstance;
+            // Add the instantiated furniture ID to the list
+            FurnitureData data = new FurnitureData
+            {
+                FurnitureBaseId = furniturePrefabInstance.GetInstanceID(),
+                ModelId = model.GetInstanceID()
+            };
+            InstantiatedFurnitureIds.Add(data);
+
+            return furniturePrefabInstance;
         }
         else
         {
@@ -71,7 +101,7 @@ public class FurnitureSpawner : MonoBehaviour
 
         if (rayGrabInteractor != null)
         {
-            var transformer = rayGrabInteractor.GetComponent<FurnitureGrabTransform>();
+            var transformer = rayGrabInteractor.GetComponent<FurnitureGrabTransformer>();
 
             transformer.leftHandInteractor = leftHandInteractor;
             transformer.righHandInteractor = righHandInteractor;
@@ -87,7 +117,22 @@ public class FurnitureSpawner : MonoBehaviour
         }
     }
 
+    private void SetupDoubleClick(GameObject furniturePrefabInstance)
+    {
+        var rayGrabInteractor = furniturePrefabInstance.transform.Find("ISDK_RayGrabInteraction");
 
+        if (rayGrabInteractor != null)
+        {
+            var ObjectClickManager = rayGrabInteractor.GetComponent<ObjectClickManager>();
+            ObjectClickManager.Editprefab = prefabParaInstanciar;
+            ObjectClickManager.sceneCamera = sceneCamera;
+        }
+        else
+        {
+            Debug.LogError("ISDK_RayGrabInteraction not found!");
+        }
+
+    }
     public static BoxCollider GetChildrenBounds(GameObject target)
     {
         if (target == null)
@@ -106,7 +151,7 @@ public class FurnitureSpawner : MonoBehaviour
 
         foreach (Renderer rend in allRenderers)
         {
-            // Skip the target object’s own renderer (if needed)
+            // Skip the target objectï¿½s own renderer (if needed)
             //if (rend.transform == target.transform)
             //    continue;
 

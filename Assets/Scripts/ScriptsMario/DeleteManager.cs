@@ -30,6 +30,7 @@ public class DeleteManager : MonoBehaviour
     public void DeletionMode()
     {
         InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
+        InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
         if (Time.time - lastCallTime < callCooldown)
         {
             Debug.Log("Ignorado: chamada muito rápida");

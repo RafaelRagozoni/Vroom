@@ -9,22 +9,22 @@ public class InstantiatePrefabUI : MonoBehaviour
     public static InstantiatePrefabUI Instance;
 
     public Camera sceneCamera;
-    public List<GameObject> FurnitureCategories;
+    public List<string> FurnitureCategories;
     private List<GameObject> spawnedPrefabs = new List<GameObject>();
 
     //Object List
-    public List<GameObject> ChairList;
-    public List<GameObject> BedList;
-    public List<GameObject> SofaList;
-    public List<GameObject> TableList;
+    public List<string> ChairList;
+    public List<string> BedList;
+    public List<string> SofaList;
+    public List<string> TableList;
 
 
     private float r = 1.5f;
     private float x_position;
     private float z_position;
     
-    public List<GameObject> AuxPrefabList;
-    public List<GameObject> currentCategoryList;
+    public List<string> AuxPrefabList;
+    public List<string> currentCategoryList;
     private int currentStartIndex;
     public int ChunkSize;
 
@@ -76,6 +76,8 @@ public class InstantiatePrefabUI : MonoBehaviour
 
     public void InstantiateFurnitureUI()
     {
+        EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
+        InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
         DeleteManager.Instance.DeactivateDeletionMode();
         if (CategoriesAddFurnitureMode==false && InstantiateFurnitureMode==false)
         {
@@ -88,7 +90,7 @@ public class InstantiatePrefabUI : MonoBehaviour
                 //Quaternion rotation = Quaternion.LookRotation(directionToCamera);
                 Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y - 0.3f, z_position);
 
-                // Calcula direção apenas no plano XZ
+                // Calcula direï¿½ï¿½o apenas no plano XZ
                 Vector3 cameraPosXZ = new Vector3(sceneCamera.transform.position.x, position.y, sceneCamera.transform.position.z);
                 Vector3 directionToCamera = cameraPosXZ - position;
                 Quaternion rotation = Quaternion.LookRotation(directionToCamera);
@@ -97,13 +99,13 @@ public class InstantiatePrefabUI : MonoBehaviour
                 GameObject prefab = GetComponent<FurnitureSpawner>().SpawnPrefab(FurnitureCategories[i],position,rotation);//Instantiate(FurnitureCategories[i], position, rotation);
 
                 spawnedPrefabs.Add(prefab);
+                
+                // Guarda o original para futura instï¿½ncia real
+                var holder = prefab.AddComponent<OriginalPrefabHolder>();
+                holder.originalPrefab = prefab;
 
                 // NORMALIZA O TAMANHO para UI
                 NormalizeScale(prefab);
-
-                // Guarda o original para futura instância real
-                var holder = prefab.AddComponent<OriginalPrefabHolder>();
-                holder.originalPrefab = FurnitureCategories[i];
 
                 var grabbable = prefab.GetComponentInChildren<Grabbable>();
                 if (grabbable != null)
@@ -111,10 +113,11 @@ public class InstantiatePrefabUI : MonoBehaviour
                     //grabbable.enabled = false; // Impede de ser agarrado
                     Debug.Log($"Desativado Grabbable no filho de {prefab.name}");
 
-                    // Adiciona o CategoriesObjectClickManager se ainda não tiver
+                    // Adiciona o CategoriesObjectClickManager se ainda nï¿½o tiver
                     if (grabbable.GetComponent<CategoriesObjectClickManager>() == null)
                     {
-                        grabbable.gameObject.AddComponent<CategoriesObjectClickManager>();
+                        var clickManager = grabbable.gameObject.AddComponent<CategoriesObjectClickManager>();
+                        clickManager.FurnitureModelPrefabPath = FurnitureCategories[i];
                     }
 
                 }
@@ -128,53 +131,17 @@ public class InstantiatePrefabUI : MonoBehaviour
         
     }
 
-    //public void InstantiateListUI(List<GameObject> List)
-    //{
-    //    for (int i = 0; i < List.Count; ++i)
-    //    {
-    //        x_position = sceneCamera.transform.position.x + r * Mathf.Cos(i * 2 * Mathf.PI / List.Count);
-    //        z_position = sceneCamera.transform.position.z + r * Mathf.Sin(i * 2 * Mathf.PI / List.Count);
-    //        Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y, z_position);
-    //        Vector3 directionToCamera = sceneCamera.transform.position - position;
-    //        Quaternion rotation = Quaternion.LookRotation(directionToCamera);
-
-    //        GameObject prefab = Instantiate(List[i], position, rotation);
-    //        spawnedPrefabs.Add(prefab);
-
-    //        // Remove o componente CategoriesObjectClickManager, se existir
-    //        var categoryClickManager = prefab.GetComponentInChildren<CategoriesObjectClickManager>();
-    //        if (categoryClickManager != null)
-    //        {
-    //            Destroy(categoryClickManager);
-    //            Debug.Log($"Removido CategoriesObjectClickManager de {prefab.name}");
-    //        }
-
-    //        var grabbable = prefab.GetComponentInChildren<Grabbable>();
-    //        if (grabbable != null)
-    //        {
-    //            grabbable.enabled = false; // Impede de ser agarrado
-    //            Debug.Log($"Desativado Grabbable no filho de {prefab.name}");
-    //            if (grabbable.GetComponent<InstantiateObjectClickManager>() == null)
-    //            {
-    //                grabbable.gameObject.AddComponent<InstantiateObjectClickManager>();
-    //            }
-    //        }
-    //        else
-    //        {
-    //            Debug.LogWarning($"Nenhum Grabbable encontrado em {prefab.name} ou filhos.");
-    //        }
-    //    }
-    //}
-    public void InstantiateListUI(List<GameObject> List)
+    public void InstantiateListUI(List<string> List)
     {
         for (int i = 0; i < List.Count; ++i)
         {
+            
             x_position = sceneCamera.transform.position.x + r * Mathf.Cos(i * 2 * Mathf.PI / List.Count);
             z_position = sceneCamera.transform.position.z + r * Mathf.Sin(i * 2 * Mathf.PI / List.Count);
 
             Vector3 position = new Vector3(x_position, sceneCamera.transform.position.y - 0.3f, z_position);
 
-            // Calcula direção apenas no plano XZ
+            // Calcula direï¿½ï¿½o apenas no plano XZ
             Vector3 cameraPosXZ = new Vector3(sceneCamera.transform.position.x, position.y, sceneCamera.transform.position.z);
             Vector3 directionToCamera = cameraPosXZ - position;
             Quaternion rotation = Quaternion.LookRotation(directionToCamera);
@@ -184,14 +151,14 @@ public class InstantiatePrefabUI : MonoBehaviour
             GameObject prefab = GetComponent<FurnitureSpawner>().SpawnPrefab(List[i], position, rotation);
             spawnedPrefabs.Add(prefab);
 
+            // Guarda o original para futura instï¿½ncia real
+            var holder = prefab.AddComponent<OriginalPrefabHolder>();
+            holder.originalPrefab = prefab;
+
             // NORMALIZA O TAMANHO para UI
             NormalizeScale(prefab);
 
-            // Guarda o original para futura instância real
-            var holder = prefab.AddComponent<OriginalPrefabHolder>();
-            holder.originalPrefab = List[i];
-
-            // Remove interações não desejadas na UI
+            // Remove interaï¿½ï¿½es nï¿½o desejadas na UI
             var categoryClickManager = prefab.GetComponentInChildren<CategoriesObjectClickManager>();
             if (categoryClickManager != null)
             {
@@ -208,7 +175,8 @@ public class InstantiatePrefabUI : MonoBehaviour
                 // Adiciona script para instanciar original ao clicar
                 if (grabbable.GetComponent<InstantiateObjectClickManager>() == null)
                 {
-                    grabbable.gameObject.AddComponent<InstantiateObjectClickManager>();
+                    var clickManager = grabbable.gameObject.AddComponent<InstantiateObjectClickManager>();
+                    clickManager.FurnitureModelPrefabPath = List[i];
                 }
             }
             else
@@ -221,7 +189,7 @@ public class InstantiatePrefabUI : MonoBehaviour
 
     private void NormalizeScale(GameObject obj)
     {
-        // Define o tamanho alvo da maior dimensão
+        // Define o tamanho alvo da maior dimensï¿½o
         float targetSize = 0.6f;
 
         // Calcula o maior lado do bounds
@@ -242,26 +210,26 @@ public class InstantiatePrefabUI : MonoBehaviour
         }
     }
 
-    public void UpdateAuxList(List<GameObject> sourceList, int chunkSize, int startIndex)
+    public void UpdateAuxList(List<string> sourceList, int chunkSize, int startIndex)
     {
         AuxPrefabList.Clear();
 
         if (sourceList == null || sourceList.Count == 0 || chunkSize <= 0)
         {
-            Debug.LogWarning("Lista inválida ou chunkSize <= 0.");
+            Debug.LogWarning("Lista invÃ¡lida ou chunkSize <= 0.");
             return;
         }
 
-        // Garantir startIndex válido dentro do intervalo da lista
+        // Garantir startIndex vÃ¡lido dentro do intervalo da lista
         startIndex = startIndex % sourceList.Count;
 
         for (int i = 0; i < chunkSize; i++)
         {
-            int index = (startIndex + i) % sourceList.Count; // índice circular
+            int index = (startIndex + i) % sourceList.Count; // Ãndice circular
             AuxPrefabList.Add(sourceList[index]);
         }
 
-        Debug.Log($"Adicionados {chunkSize} elementos à AuxPrefabList a partir do índice {startIndex} (circular).");
+        Debug.Log($"Adicionados {chunkSize} elementos Ã  AuxPrefabList a partir do Ã­ndice {startIndex} (circular).");
     }
 
 
@@ -279,10 +247,10 @@ public class InstantiatePrefabUI : MonoBehaviour
             }
 
             canClick = false;  // Bloqueia novos cliques
-            StartCoroutine(EnableClickAfterDelay(0.3f));  // Reativa após delay
+            StartCoroutine(EnableClickAfterDelay(0.3f));  // Reativa apï¿½s delay
 
-            Debug.Log("Valor de ChunkSize dentro da função: " + ChunkSize);
-            Debug.Log("Valor de currentStartIndex dentro da função: " + currentStartIndex);
+            Debug.Log("Valor de ChunkSize dentro da funï¿½ï¿½o: " + ChunkSize);
+            Debug.Log("Valor de currentStartIndex dentro da funï¿½ï¿½o: " + currentStartIndex);
 
             DeactivateAddFurnitureMode();
             currentStartIndex = (currentStartIndex + ChunkSize) % currentCategoryList.Count;
@@ -305,12 +273,12 @@ public class InstantiatePrefabUI : MonoBehaviour
             canClick = false;
             StartCoroutine(EnableClickAfterDelay(0.3f));
 
-            Debug.Log("Valor de ChunkSize dentro da função: " + ChunkSize);
-            Debug.Log("Valor de currentStartIndex dentro da função: " + currentStartIndex);
+            Debug.Log("Valor de ChunkSize dentro da funï¿½ï¿½o: " + ChunkSize);
+            Debug.Log("Valor de currentStartIndex dentro da funï¿½ï¿½o: " + currentStartIndex);
 
             DeactivateAddFurnitureMode();
 
-            // Atualiza o índice para trás, garantindo que continue no intervalo correto
+            // Atualiza o ï¿½ndice para trï¿½s, garantindo que continue no intervalo correto
             currentStartIndex = (currentStartIndex - ChunkSize + currentCategoryList.Count) % currentCategoryList.Count;
 
             UpdateAuxList(currentCategoryList, ChunkSize, currentStartIndex);
