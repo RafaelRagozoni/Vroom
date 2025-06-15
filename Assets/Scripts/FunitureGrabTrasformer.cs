@@ -126,6 +126,8 @@ namespace Oculus.Interaction
             _initialRayHitPoint = GetInteractorRayHit(righHandInteractor.Ray, collider)?.point;
 
             marker.GetComponent<Renderer>().enabled = true;
+
+            type = FurnitureType.Wall;
         }
 
         /// <summary>
@@ -149,31 +151,31 @@ namespace Oculus.Interaction
             int count = _grabbable.GrabPoints.Count;
             Transform targetTransform = _grabbable.Transform;
 
-
             var targetCollider = targetTransform.GetComponentInParent<Collider>();
 
-            var hit = SnapToRayIntersection(targetTransform);
+            var hit = GetRayHit(targetTransform);
+
             if (hit.HasValue)
             {
                 var surfaceNormal = hit.Value.normal;
 
-                if (this.type == FurnitureType.Floor && !(Vector3.Dot(surfaceNormal, Vector3.up) > 0.99))
+                if (this.type == FurnitureType.Floor)
                 {
-                    return;
+                    surfaceNormal = Vector3.up;
+                    targetTransform.position = hit.Value.point;
+                    SnapTransformToSurface(targetTransform, targetCollider, surfaceNormal);
+                    RotateTransformWithInteractor(targetTransform);
                 }
-                Debug.Log("Hit point: " + hit.Value.point.ToString());
-                SnapTransformToSurface(targetTransform, targetCollider, surfaceNormal);
-                //SnapTransformToGrid(marker.transform);
-                //ResolveWallPenetration(targetTransform, targetCollider);
-
-                targetCollider.enabled = false;
-                var markerCollider = marker.GetComponentInParent<Collider>();
-                //SnapTransformToSurface(marker.transform, markerCollider, surfaceNormal);
-                targetCollider.enabled = true;
-
+                else if (this.type == FurnitureType.Wall)
+                {
+                    targetTransform.position = hit.Value.point;
+                    SnapTransformToSurface(targetTransform, targetCollider, surfaceNormal);
+                }
             }
 
-            //RotateTransformWithInteractor(targetTransform.GetChild(2));
+            if (this.type == FurnitureType.Floor)
+            {
+            }
         }
 
         private void ResolveWallPenetration(Transform targetTransform, Collider collider)
@@ -216,18 +218,13 @@ namespace Oculus.Interaction
         }
 
 
-        private RaycastHit? SnapToRayIntersection(Transform targetTransform)
+        private RaycastHit? GetRayHit(Transform targetTransform)
         {
             var collider = targetTransform.GetComponentInParent<Collider>();
 
             var interactorRay = righHandInteractor.Ray;
 
             var hit = GetInteractorRayHit(interactorRay, collider);
-
-            if (hit != null)
-            {
-                targetTransform.position = hit.Value.point;
-            }
 
             return hit;
         }
@@ -329,14 +326,29 @@ namespace Oculus.Interaction
 
             static void AlignWithVector(Transform transform, Vector3 surfaceNormal, Vector3? forwardHint = null)
             {
-                if (Math.Abs(Vector3.Dot(transform.up, surfaceNormal)) < 0.01f)
+                if (Vector3.Dot(Vector3.up, surfaceNormal) > 0.9)
                 {
-                    var right = Vector3.Cross(transform.up, surfaceNormal);
-                    var forward = Vector3.Cross(surfaceNormal, right);
-                    // Calculate a rotation where the Y-axis points along the surface normal
-                    Quaternion rotation = Quaternion.LookRotation(forward, surfaceNormal);
-
-                    transform.rotation = rotation;
+                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                }
+                else if (Vector3.Dot(Vector3.up, surfaceNormal) < -0.9)
+                {
+                    transform.rotation = Quaternion.Euler(180.0f, 0.0f, 0.0f);
+                }
+                else if (Vector3.Dot(Vector3.forward, surfaceNormal) > 0.9)
+                {
+                    transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+                }
+                else if (Vector3.Dot(Vector3.forward, surfaceNormal) < -0.9)
+                {
+                    transform.rotation = Quaternion.Euler(90.0f, 180.0f, 0.0f);
+                }
+                else if (Vector3.Dot(Vector3.right, surfaceNormal) > 0.9)
+                {
+                    transform.rotation = Quaternion.Euler(90.0f, 90.0f, 0.0f);
+                }
+                else if (Vector3.Dot(Vector3.right, surfaceNormal) < -0.9)
+                {
+                    transform.rotation = Quaternion.Euler(90.0f, -90.0f, 0.0f);
                 }
             }
         }
