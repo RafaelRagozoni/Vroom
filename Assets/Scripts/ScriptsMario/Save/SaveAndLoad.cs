@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Meta.WitAi.Json;
 using UnityEngine;
+using TMPro;
+using System.IO;
 
 public class SaveAndLoad : MonoBehaviour
 {
@@ -13,7 +15,14 @@ public class SaveAndLoad : MonoBehaviour
     public GameObject ceiling;
     public GameObject floor;
 
-    
+    //Room Name to be saved
+    public TMP_InputField roomNameInput;
+
+    // Dropdown for loading room
+    public TMP_Dropdown loadDropdown;
+
+    // Load UI Panel
+    public GameObject loadUIPanel;
 
     [System.Serializable]
     public class InstancedFurnitureData
@@ -51,7 +60,20 @@ public class SaveAndLoad : MonoBehaviour
 
     }
 
-    public void Save()
+    public void SaveFromUI()
+    {
+        if (roomNameInput != null && !string.IsNullOrEmpty(roomNameInput.text))
+        {
+            Save(roomNameInput.text);
+        }
+        else
+        {
+            Debug.LogError("TMP_InputField não está atribuído ou está vazio!");
+        }
+    }
+
+
+    public void Save(string roomName)
     {
         var instantiatedFurniture = GetComponent<FurnitureSpawner>().InstantiatedFurnitureIds;
         var furniturePaths = GetComponent<FurnitureSpawner>().InstantiatedFurniturePaths;
@@ -86,14 +108,14 @@ public class SaveAndLoad : MonoBehaviour
 
 
         string json = JsonUtility.ToJson(sceneData, true); // 'true' para formatar bonito
-        System.IO.File.WriteAllText(Application.persistentDataPath + "/sceneData.json", json);
+        System.IO.File.WriteAllText(Application.persistentDataPath + $"/sceneData_{roomName}.json", json);
         Debug.Log(Application.persistentDataPath);
         Debug.Log("Scene data saved successfully.");
     }
 
-    public void Load()
-    {   
-        string path = Application.persistentDataPath + "/sceneData.json";
+    public void Load(string roomName)
+    {
+        string path = Application.persistentDataPath + $"/sceneData_{roomName}.json";
         if (System.IO.File.Exists(path))
         {
             var instantiatedFurniture = GetComponent<FurnitureSpawner>().InstantiatedFurnitureIds;
@@ -123,7 +145,7 @@ public class SaveAndLoad : MonoBehaviour
             GetComponent<RoomReshaper>().MoveGizmos(sceneData.RoomData.GizmosPosition);
             // Apply Materials to Walls and Floor
             var materialsPathDict = GetComponent<MaterialsPathDict>();
-    
+
             floor.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[0]));
             ceiling.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[1]));
             wallL.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[2]));
@@ -147,5 +169,58 @@ public class SaveAndLoad : MonoBehaviour
                 return obj;
         }
         return null;
+    }
+
+    public List<string> GetSavedRoomNames()
+    {
+        List<string> roomNames = new List<string>();
+        string[] files = Directory.GetFiles(Application.persistentDataPath, "sceneData_*.json");
+        foreach (var file in files)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(file);
+            // Remove o prefixo "sceneData_"
+            if (fileName.StartsWith("sceneData_"))
+            {
+                string roomName = fileName.Substring("sceneData_".Length);
+                roomNames.Add(roomName);
+            }
+        }
+        return roomNames;
+    }
+
+    // public void PopulateLoadDropdown()
+    // {
+    //     loadDropdown.ClearOptions();
+    //     var roomNames = GetSavedRoomNames();
+    //     Debug.Log("Rooms encontrados: " + string.Join(", ", roomNames));
+    //     loadDropdown.AddOptions(roomNames);
+    // }
+
+    public void PopulateLoadDropdown()
+    {
+        loadDropdown.ClearOptions();
+        var roomNames = GetSavedRoomNames();
+        // Adiciona a opção neutra no início
+        List<string> options = new List<string> { "Select a Room..." };
+        options.AddRange(roomNames);
+        loadDropdown.AddOptions(options);
+        loadDropdown.value = 0; // Garante que a opção neutra está selecionada
+    }
+
+    // Chame este método ao abrir a tela de Load, por exemplo no Start ou ao abrir o painel de Load
+
+    // public void OnDropdownLoadSelected()
+    // {
+    //     string selectedRoom = loadDropdown.options[loadDropdown.value].text;
+    //     Load(selectedRoom);
+    // }    
+
+    public void OnDropdownLoadSelected()
+    {
+        // Só carrega se não for a opção neutra
+        if (loadDropdown.value == 0) return;
+        string selectedRoom = loadDropdown.options[loadDropdown.value].text;
+        Load(selectedRoom);
+        loadUIPanel.SetActive(false); // Fecha o painel de Load após carregar
     }
 }
