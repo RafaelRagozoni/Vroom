@@ -26,7 +26,7 @@ public class FurnitureSpawner : MonoBehaviour
 
     public Dictionary<int,string> InstantiatedFurniturePaths = new Dictionary<int,string>();
 
-    public GameObject SpawnPrefab(string pathPrefab, Vector3 position, Quaternion rotation)
+    public GameObject SpawnPrefab(string pathPrefab, Vector3 position, Quaternion rotation, FurnitureType type=FurnitureType.Floor)
     {
         // Load the prefab from the specified path (runtime safe)
         GameObject model = Resources.Load<GameObject>(pathPrefab);
@@ -47,7 +47,7 @@ public class FurnitureSpawner : MonoBehaviour
 
             modelInstance.transform.SetParent(furniturePrefabInstance.transform);
 
-            SetupInteractors(furniturePrefabInstance);
+            SetupInteractors(furniturePrefabInstance,type);
             SetupDoubleClick(furniturePrefabInstance);
             furniturePrefabInstance.transform.localScale = new Vector3(scale, scale, scale);
 

@@ -32,6 +32,11 @@ public class InstantiatePrefabUIEditor : Editor
             script.TableList = GetRawModelPaths("Prefabs/FurnitureModels/Table");
             EditorUtility.SetDirty(script);
         }
+        if (GUILayout.Button("Preencher WallDecorationList com raw_model"))
+        {
+            script.WallDecorationList = GetRawModelPaths("Prefabs/FurnitureModels/WallDecoration");
+            EditorUtility.SetDirty(script);
+        }
     }
 
     private List<string> GetRawModelPaths(string resourcesRelativeFolder)

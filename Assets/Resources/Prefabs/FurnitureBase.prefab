@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa562e66cf2671546b2b34c4f98e11c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   gridSize: 0.001
   rayStart: 0.1
   righHandInteractor: {fileID: 0}
@@ -135,6 +136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288f45c8dce36ae47801419fa0736322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneCamera: {fileID: 0}
+  Editprefab: {fileID: 0}
 --- !u!1 &5278135885151509768
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +198,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!1001 &3126638946432313753
 PrefabInstance:
   m_ObjectHideFlags: 0

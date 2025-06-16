@@ -5,6 +5,8 @@ public class InstantiateObjectClickManager : MonoBehaviour
 {
     private Grabbable grabbable;
     public string FurnitureModelPrefabPath { get; set; }
+    public FurnitureType FurnitureType { get; set; }
+
     private void Start()
     {
         grabbable = GetComponent<Grabbable>();
@@ -46,7 +48,7 @@ public class InstantiateObjectClickManager : MonoBehaviour
                 return;
             }
 
-            GameObject newObject = InstantiatePrefab.Instance.InstantiateObject(FurnitureModelPrefabPath);
+            GameObject newObject = InstantiatePrefab.Instance.InstantiateObject(FurnitureModelPrefabPath,FurnitureType);
 
             // Remove managers indesejados
             var componentsToRemove = newObject.GetComponentsInChildren<InstantiateObjectClickManager>(true);

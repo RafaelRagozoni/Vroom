@@ -90,7 +90,7 @@ public class InstantiatePrefab : MonoBehaviour
 
     //}
 
-    public GameObject InstantiateObject(string pathPrefab)
+    public GameObject InstantiateObject(string pathPrefab, FurnitureType type)
     {
         if (!canClick) return null;
 
@@ -102,14 +102,21 @@ public class InstantiatePrefab : MonoBehaviour
         Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
     
         //var obj = Instantiate(prefab, position, prefab.transform.rotation);
-        var obj = GetComponent<FurnitureSpawner>().SpawnPrefab(pathPrefab, position, Quaternion.identity);
+        var obj = GetComponent<FurnitureSpawner>().SpawnPrefab(pathPrefab, position, Quaternion.identity, type);
 
         if (!obj.TryGetComponent<Rigidbody>(out var rb))
             rb = obj.AddComponent<Rigidbody>();
 
         
+        if (type != FurnitureType.Floor)
+        {
+            rb.isKinematic = true; // Se for um objeto de parede ou teto, deixa isKinematic
+        }
+        else
+        {
+            rb.isKinematic = false; // Se for um objeto de piso, deixa isKinematic falso
+        }
 
-        rb.isKinematic = false;
         rb.useGravity = true;
         rb.constraints = RigidbodyConstraints.FreezePositionX |
                          RigidbodyConstraints.FreezePositionZ |

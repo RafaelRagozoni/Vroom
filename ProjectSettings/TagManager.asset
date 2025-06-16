@@ -15,6 +15,7 @@ TagManager:
   - TableListTag
   - Furniture
   - DoNotDestroy
+  - WallDecorationListTag
   layers:
   - Default
   - TransparentFX

@@ -126,8 +126,6 @@ namespace Oculus.Interaction
             _initialRayHitPoint = GetInteractorRayHit(righHandInteractor.Ray, collider)?.point;
 
             marker.GetComponent<Renderer>().enabled = true;
-
-            type = FurnitureType.Wall;
         }
 
         /// <summary>

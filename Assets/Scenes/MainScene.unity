@@ -9896,7 +9896,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 476606097}
         m_TargetAssemblyTypeName: ActivateSaveAndLoadUI, Assembly-CSharp
-        m_MethodName: ActivateLoadUI
+        m_MethodName: ActivateSaveUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13071,6 +13071,7 @@ MonoBehaviour:
   - Prefabs/FurnitureModels/Chair/5c743f3d-6647-4f2b-9ecf-561b119cc104/raw_model
   - Prefabs/FurnitureModels/Sofa/1e71562b-34e3-44ac-b28e-d17589060ad0/sofa_model
   - Prefabs/FurnitureModels/Table/3ee0376a-5f95-4076-8ef5-e81a8eeb4e32/table_model
+  - Prefabs/FurnitureModels/WallDecoration/piet_painting/raw_model1
   ChairList:
   - Prefabs/FurnitureModels/Chair/5119667c-2467-47d8-b68d-6c66bfb90bc3/raw_model
   - Prefabs/FurnitureModels/Chair/52630675-9772-469c-b368-01b96270a6a6/raw_model
@@ -13116,6 +13117,9 @@ MonoBehaviour:
   - Prefabs/FurnitureModels/Table/ce26b666-e786-417d-8261-cd5b1b6dbb15/raw_model
   - Prefabs/FurnitureModels/Table/e00349c0-02d1-4d62-9299-1b32299dcc35/raw_model
   - Prefabs/FurnitureModels/Table/fe98de65-9939-4488-af3f-a6c6de4e471c/raw_model
+  WallDecorationList:
+  - Prefabs/FurnitureModels/WallDecoration/piet_painting/raw_model
+  - Prefabs/FurnitureModels/WallDecoration/vangogh_painting/raw_model
   AuxPrefabList: []
   currentCategoryList: []
   ChunkSize: 6
@@ -13133,7 +13137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39b2973b4c37eaa4081c310b662a52ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  furniturePrefab: {fileID: 5278135885151509768, guid: f94720c42987b624093e765fddf1c06a, type: 3}
+  furniturePrefab: {fileID: 5278135885151509768, guid: ea54fbd92b99a3b45896711f4cbd21ca, type: 3}
   righHandInteractor: {fileID: 1310671784}
   leftHandInteractor: {fileID: 231838771}
   scale: 1
@@ -13983,6 +13987,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SaveUI: {fileID: 1282359720}
   LoadUI: {fileID: 1161341607}
+  sceneCamera: {fileID: 526514016}
+  distanceFromCamera: 1
 --- !u!1 &476814086
 GameObject:
   m_ObjectHideFlags: 0
@@ -46668,9 +46674,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 476606095}
-        m_TargetAssemblyTypeName: SaveAndLoad, Assembly-CSharp
-        m_MethodName: Load
+      - m_Target: {fileID: 476606097}
+        m_TargetAssemblyTypeName: ActivateSaveAndLoadUI, Assembly-CSharp
+        m_MethodName: ActivateLoadUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
