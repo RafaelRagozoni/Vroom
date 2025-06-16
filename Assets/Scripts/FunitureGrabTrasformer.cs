@@ -2,12 +2,17 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using System.Collections;
 
 
 namespace Oculus.Interaction
 {
+    public enum FurnitureType
+    {
+        Floor,
+        Wall,
+        Ceiling
+    }
+
     /// <summary>
     /// An <see cref="ITransformer"/> that can translate, rotate and scale a transform using any number of grab points
     /// while also constraining the transformation if desired. This is the default Interaction SDK grab behavior
@@ -16,6 +21,7 @@ namespace Oculus.Interaction
     /// </summary>
     public class FurnitureGrabTransformer : MonoBehaviour, ITransformer
     {
+        public FurnitureType type = FurnitureType.Floor;
         public float gridSize = 1.0f;
         public float rayStart = 1.0f;
         public RayInteractor righHandInteractor;
@@ -28,7 +34,7 @@ namespace Oculus.Interaction
         private Vector3? _initialRayHitPoint;
         private Vector3 _initialObjectPosition;
 
-        private Quaternion _lastRotation = Quaternion.identity;
+        private Quaternion _initialRotation = Quaternion.identity;
 
         private GrabPointDelta[] _deltas;
 
@@ -110,16 +116,18 @@ namespace Oculus.Interaction
             _grabDeltaInLocalSpace = new Pose(
                 targetTransform.InverseTransformVector(centroid - targetTransform.position),
                 targetTransform.rotation);
-            _lastRotation = Quaternion.identity;
+            _initialRotation = targetTransform.rotation;
 
             _initialObjectPosition = targetTransform.position;
             _initialrightHandRotation = righHandInteractor.Rotation.eulerAngles.z;
 
 
             var collider = targetTransform.GetComponentInParent<Collider>();
-            _initialRayHitPoint = GetInteractorRayHitPosition(righHandInteractor.Ray, collider);
+            _initialRayHitPoint = GetInteractorRayHit(righHandInteractor.Ray, collider)?.point;
 
             marker.GetComponent<Renderer>().enabled = true;
+
+            type = FurnitureType.Wall;
         }
 
         /// <summary>
@@ -143,19 +151,31 @@ namespace Oculus.Interaction
             int count = _grabbable.GrabPoints.Count;
             Transform targetTransform = _grabbable.Transform;
 
-            RotateTransformWithInteractor(targetTransform);
-
             var targetCollider = targetTransform.GetComponentInParent<Collider>();
 
-            SnapToRayIntersection(targetTransform);
-            SnapTransformToGround(targetTransform, targetCollider);
-            SnapTransformToGrid(marker.transform);
-            //ResolveWallPenetration(targetTransform, targetCollider);
+            var hit = GetRayHit(targetTransform);
 
-            targetCollider.enabled = false;
-            var markerCollider = marker.GetComponentInParent<Collider>();
-            SnapTransformToGround(marker.transform, markerCollider);
-            targetCollider.enabled = true;
+            if (hit.HasValue)
+            {
+                var surfaceNormal = hit.Value.normal;
+
+                if (this.type == FurnitureType.Floor)
+                {
+                    surfaceNormal = Vector3.up;
+                    targetTransform.position = hit.Value.point;
+                    SnapTransformToSurface(targetTransform, targetCollider, surfaceNormal);
+                    RotateTransformWithInteractor(targetTransform);
+                }
+                else if (this.type == FurnitureType.Wall)
+                {
+                    targetTransform.position = hit.Value.point;
+                    SnapTransformToSurface(targetTransform, targetCollider, surfaceNormal);
+                }
+            }
+
+            if (this.type == FurnitureType.Floor)
+            {
+            }
         }
 
         private void ResolveWallPenetration(Transform targetTransform, Collider collider)
@@ -177,7 +197,7 @@ namespace Oculus.Interaction
                         out Vector3 direction, out float distance))
                     {
                         Debug.Log("Penetration is: " + distance);
-                        direction.y = 0;
+                        //direction.y = 0;
                         targetTransform.position -= direction * distance;
                     }
 
@@ -192,26 +212,24 @@ namespace Oculus.Interaction
             var currentRotationX = targetTransform.localRotation.eulerAngles.x;
             var currentRotationZ = targetTransform.localRotation.eulerAngles.z;
             //var newRotationY = currentRotationY + 4 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
-            var newRotationY = 2 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
-            targetTransform.localRotation = Quaternion.Euler(currentRotationX, newRotationY, currentRotationZ);
+            var deltaRotationY = 2 * (_initialrightHandRotation - righHandInteractor.Rotation.eulerAngles.z);
+            var initialRotationY = _initialRotation.eulerAngles.y;
+            targetTransform.localRotation = Quaternion.Euler(currentRotationX, initialRotationY + deltaRotationY, currentRotationZ);
         }
 
 
-        private void SnapToRayIntersection(Transform targetTransform)
+        private RaycastHit? GetRayHit(Transform targetTransform)
         {
             var collider = targetTransform.GetComponentInParent<Collider>();
 
             var interactorRay = righHandInteractor.Ray;
 
-            var hitPoint = GetInteractorRayHitPosition(interactorRay, collider);
+            var hit = GetInteractorRayHit(interactorRay, collider);
 
-            if (hitPoint != null)
-            {
-                targetTransform.position = hitPoint.Value;
-            }
+            return hit;
         }
 
-        private Vector3? GetInteractorRayHitPosition(Ray ray, Collider collider)
+        private RaycastHit? GetInteractorRayHit(Ray ray, Collider collider)
         {
             var originalColliderState = collider.enabled;
 
@@ -219,11 +237,11 @@ namespace Oculus.Interaction
 
             ray.origin = ray.origin + rayStart * ray.direction;
 
-            Vector3? hitPoint = null;
+            RaycastHit? hitPoint = null;
 
             if (Physics.Raycast(ray, out var hitInfo))
             {
-                hitPoint = hitInfo.point;
+                hitPoint = hitInfo;
             }
 
             collider.enabled = originalColliderState;
@@ -241,15 +259,15 @@ namespace Oculus.Interaction
             return (float)Math.Round(v / gridSize) * gridSize;
         }
 
-        private static void SnapTransformToGround(Transform targetTransform, Collider collider)
+        private static void SnapTransformToSurface(Transform targetTransform, Collider collider, Vector3 surfaceNormal)
         {
-            var rayOrigin = targetTransform.position + Vector3.up * 100.0f;
-            var rayDirection = Vector3.down;
+            var rayDistance = Math.Abs(Vector3.Dot(collider.bounds.extents, surfaceNormal)) + 0.5f;
+            var rayOrigin = targetTransform.position + surfaceNormal * rayDistance;
+            var rayDirection = -surfaceNormal;
 
             var extents = collider.bounds.extents;
 
             var isEnabled = collider.enabled;
-            var boundMinY = collider.bounds.min.y;
 
             collider.enabled = false;
             var hits = Physics.BoxCastAll(rayOrigin, extents, rayDirection);
@@ -260,11 +278,13 @@ namespace Oculus.Interaction
             {
                 collider.enabled = isEnabled;
 
-                float halfHeight = 0.0f;
-                targetTransform.position = new Vector3(
-                    targetTransform.position.x,
-                    closestValidHit.Value.point.y + halfHeight,
-                    targetTransform.position.z);
+                //InstantiateSphere(rayOrigin, targetTransform, Color.blue);
+                //InstantiateSphere(closestValidHit.Value.point, targetTransform, Color.red);
+                var newPosition = ProjectPointOntoPlane(targetTransform.position, closestValidHit.Value.point, surfaceNormal);
+
+                targetTransform.position = newPosition;
+                targetTransform.position = newPosition;
+                AlignWithVector(targetTransform, surfaceNormal);
             }
 
             collider.enabled = isEnabled;
@@ -274,11 +294,11 @@ namespace Oculus.Interaction
             {
                 RaycastHit? closest = null;
 
-                float finalDistance = 9999999.0f;
+                float finalDistance = float.PositiveInfinity;
 
                 foreach (var hit in hits)
                 {
-                    if (hit.transform.gameObject.tag == "floor" || hit.transform.gameObject.tag == "Furniture")
+                    if (hit.transform.gameObject.tag == "floor" || hit.transform.gameObject.tag == "Furniture" || hit.transform.gameObject.tag == "wall")
                     {
                         float distance = (rayOrigin - hit.point).sqrMagnitude;
                         if (distance < finalDistance)
@@ -291,6 +311,77 @@ namespace Oculus.Interaction
 
                 return closest;
             }
+
+            static Vector3 ProjectPointOntoPlane(Vector3 point, Vector3 planePoint, Vector3 planeNormal)
+            {
+                // Vector from planePoint to the point
+                Vector3 toPoint = point - planePoint;
+
+                // Distance from point to plane along the normal
+                float distance = Vector3.Dot(toPoint, planeNormal.normalized);
+
+                // Projected point is the original point minus the component in the normal direction
+                return point - distance * planeNormal.normalized;
+            }
+
+            static void AlignWithVector(Transform transform, Vector3 surfaceNormal, Vector3? forwardHint = null)
+            {
+                if (Vector3.Dot(Vector3.up, surfaceNormal) > 0.9)
+                {
+                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                }
+                else if (Vector3.Dot(Vector3.up, surfaceNormal) < -0.9)
+                {
+                    transform.rotation = Quaternion.Euler(180.0f, 0.0f, 0.0f);
+                }
+                else if (Vector3.Dot(Vector3.forward, surfaceNormal) > 0.9)
+                {
+                    transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+                }
+                else if (Vector3.Dot(Vector3.forward, surfaceNormal) < -0.9)
+                {
+                    transform.rotation = Quaternion.Euler(90.0f, 180.0f, 0.0f);
+                }
+                else if (Vector3.Dot(Vector3.right, surfaceNormal) > 0.9)
+                {
+                    transform.rotation = Quaternion.Euler(90.0f, 90.0f, 0.0f);
+                }
+                else if (Vector3.Dot(Vector3.right, surfaceNormal) < -0.9)
+                {
+                    transform.rotation = Quaternion.Euler(90.0f, -90.0f, 0.0f);
+                }
+            }
+        }
+
+        public static GameObject InstantiateSphere(Vector3 position, Transform parentTransform = null, Color? color = null)
+        {
+            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.transform.position = position;
+
+            if (parentTransform != null)
+            {
+                sphere.transform.SetParent(parentTransform);
+            }
+
+            // Remove collider
+            Collider collider = sphere.GetComponent<Collider>();
+            if (collider != null)
+            {
+                GameObject.Destroy(collider);
+            }
+
+            // Set color
+            Renderer renderer = sphere.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material = new Material(Shader.Find("Standard"));
+                renderer.material.color = color ?? Color.white; // Default to white if no color provided
+            }
+
+            // Destroy after 3 seconds
+            GameObject.Destroy(sphere, 3f);
+
+            return sphere;
         }
 
 
@@ -307,7 +398,7 @@ namespace Oculus.Interaction
             var collider = _grabbable.Transform.GetComponentInParent<Collider>();
             marker.GetComponent<Renderer>().enabled = false;
             SnapTransformToGrid(_grabbable.Transform);
-            SnapTransformToGround(_grabbable.Transform, collider);
+            //SnapTransformToSurface(_grabbable.Transform, collider);
             ResolveWallPenetration(_grabbable.Transform, collider);
         }
 

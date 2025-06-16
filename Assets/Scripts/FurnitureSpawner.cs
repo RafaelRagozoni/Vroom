@@ -95,7 +95,7 @@ public class FurnitureSpawner : MonoBehaviour
     }
 
 
-    private void SetupInteractors(GameObject furniturePrefabInstance)
+    private void SetupInteractors(GameObject furniturePrefabInstance, FurnitureType type)
     {
         var rayGrabInteractor = furniturePrefabInstance.transform.Find("ISDK_RayGrabInteraction");
 
@@ -105,6 +105,7 @@ public class FurnitureSpawner : MonoBehaviour
 
             transformer.leftHandInteractor = leftHandInteractor;
             transformer.righHandInteractor = righHandInteractor;
+            transformer.type = type;
 
             var colliderSurface = rayGrabInteractor.GetComponent<ColliderSurface>();
 
