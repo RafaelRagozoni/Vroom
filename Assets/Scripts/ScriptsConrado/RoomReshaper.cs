@@ -1,4 +1,5 @@
 using Meta.Voice;
+using Oculus.Interaction;
 using TMPro;
 using UnityEngine;
 
@@ -131,9 +132,48 @@ public class RoomReshaper : MonoBehaviour
         originalGizmoX = gizmoX.transform.position.x;
         originalGizmoY = gizmoY.transform.position.y;
         originalGizmoZ = gizmoZ.transform.position.z;
-        xText.text = (originalGizmoX - 11).ToString("F2") + "m";
-        yText.text = (originalGizmoY - 15).ToString("F2") + "m";
-        zText.text = (originalGizmoZ - 11).ToString("F2") + "m";
+        xText.text = (originalGizmoX - 7.6).ToString("F2") + "m";
+        yText.text = (originalGizmoY - 10.1).ToString("F2") + "m";
+        zText.text = (originalGizmoZ - 7.6).ToString("F2") + "m";
+
+        var oneGrabTranslateTransformerX = gizmoX.transform.GetComponentInChildren<OneGrabTranslateTransformer>();
+        if (oneGrabTranslateTransformerX != null)
+        {
+            oneGrabTranslateTransformerX.Constraints.MinY.Constrain = true;
+            oneGrabTranslateTransformerX.Constraints.MinY.Value = gizmoX.transform.position.y;
+            oneGrabTranslateTransformerX.Constraints.MinZ.Constrain = true;
+            oneGrabTranslateTransformerX.Constraints.MinZ.Value = gizmoX.transform.position.z;
+            oneGrabTranslateTransformerX.Constraints.MaxY.Constrain = true;
+            oneGrabTranslateTransformerX.Constraints.MaxY.Value = gizmoX.transform.position.y;
+            oneGrabTranslateTransformerX.Constraints.MaxZ.Constrain = true;
+            oneGrabTranslateTransformerX.Constraints.MaxZ.Value = gizmoX.transform.position.z;
+        }
+
+        var oneGrabTranslateTransformerY = gizmoY.transform.GetComponentInChildren<OneGrabTranslateTransformer>();
+        if (oneGrabTranslateTransformerY != null)
+        {
+            oneGrabTranslateTransformerY.Constraints.MinX.Constrain = true;
+            oneGrabTranslateTransformerY.Constraints.MinX.Value = gizmoY.transform.position.x;
+            oneGrabTranslateTransformerY.Constraints.MinZ.Constrain = true;
+            oneGrabTranslateTransformerY.Constraints.MinZ.Value = gizmoY.transform.position.z;
+            oneGrabTranslateTransformerY.Constraints.MaxX.Constrain = true;
+            oneGrabTranslateTransformerY.Constraints.MaxX.Value = gizmoY.transform.position.x;
+            oneGrabTranslateTransformerY.Constraints.MaxZ.Constrain = true;
+            oneGrabTranslateTransformerY.Constraints.MaxZ.Value = gizmoY.transform.position.z;
+        }
+
+        var oneGrabTranslateTransformerZ = gizmoZ.transform.GetComponentInChildren<OneGrabTranslateTransformer>();
+        if (oneGrabTranslateTransformerZ != null)
+        {
+            oneGrabTranslateTransformerZ.Constraints.MinX.Constrain = true;
+            oneGrabTranslateTransformerZ.Constraints.MinX.Value = gizmoZ.transform.position.x;
+            oneGrabTranslateTransformerZ.Constraints.MinY.Constrain = true;
+            oneGrabTranslateTransformerZ.Constraints.MinY.Value = gizmoZ.transform.position.y;
+            oneGrabTranslateTransformerZ.Constraints.MaxX.Constrain = true;
+            oneGrabTranslateTransformerZ.Constraints.MaxX.Value = gizmoZ.transform.position.x;
+            oneGrabTranslateTransformerZ.Constraints.MaxY.Constrain = true;
+            oneGrabTranslateTransformerZ.Constraints.MaxY.Value = gizmoZ.transform.position.y;
+        }
 
     }
 
