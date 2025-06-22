@@ -1,9 +1,17 @@
 using UnityEngine;
+using TMPro;
 
 public class ActivateSaveAndLoadUI : MonoBehaviour
 {
     public GameObject SaveUI;
     public GameObject LoadUI;
+
+    // Save Feedback UI
+    public GameObject saveFeedbackUI;
+    public TMP_Text saveFeedbackText;
+
+    // Error Save feedback UI
+    public GameObject errorSaveFeedbackUI;
 
     public Camera sceneCamera;
     public float distanceFromCamera = 1.0f; // Distance from the camera to position the UI
@@ -46,6 +54,38 @@ public class ActivateSaveAndLoadUI : MonoBehaviour
             DeactivateSaveUI(); // Deactivate Save UI when Load UI is activated
         }
     }
+
+    public void ActivateSaveFeedbackUI(string feedbackText)
+    {
+        if (saveFeedbackUI != null && saveFeedbackText != null)
+        {
+            saveFeedbackText.text = feedbackText;
+            saveFeedbackUI.SetActive(true);
+            errorSaveFeedbackUI.SetActive(false);
+            saveFeedbackUI.transform.position = sceneCamera.transform.position + sceneCamera.transform.forward * distanceFromCamera;
+            saveFeedbackUI.transform.LookAt(sceneCamera.transform, Vector3.up);
+            // Correct the rotation so the UI does not appear mirrored
+            saveFeedbackUI.transform.Rotate(0, 180, 0);
+            DeactivateLoadUI();
+            DeactivateSaveUI();
+        }
+    }
+
+    public void ActivateErrorSaveFeedbackUI()
+    {
+        if (errorSaveFeedbackUI != null)
+        {
+            errorSaveFeedbackUI.SetActive(true);
+            saveFeedbackUI.SetActive(false);
+            errorSaveFeedbackUI.transform.position = sceneCamera.transform.position + sceneCamera.transform.forward * distanceFromCamera;
+            errorSaveFeedbackUI.transform.LookAt(sceneCamera.transform, Vector3.up);
+            // Correct the rotation so the UI does not appear mirrored
+            errorSaveFeedbackUI.transform.Rotate(0, 180, 0);
+            DeactivateLoadUI();
+            DeactivateSaveUI();
+        }
+    }
+
     public void DeactivateSaveUI()
     {
         if (SaveUI != null)
@@ -53,6 +93,23 @@ public class ActivateSaveAndLoadUI : MonoBehaviour
             SaveUI.SetActive(false);
         }
     }
+
+    public void DeactivateSaveUIFeedBack()
+    {
+        if (saveFeedbackUI != null)
+        {
+            saveFeedbackUI.SetActive(false);
+        }
+    }
+
+    public void DeactivateErrorSaveUIFeedBack()
+    {
+        if (errorSaveFeedbackUI != null)
+        {
+            errorSaveFeedbackUI.SetActive(false);
+        }
+    }
+
     public void DeactivateLoadUI()
     {
         if (LoadUI != null)

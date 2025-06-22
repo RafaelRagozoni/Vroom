@@ -4,6 +4,7 @@ using Meta.WitAi.Json;
 using UnityEngine;
 using TMPro;
 using System.IO;
+using UnityEngine.UI;
 
 public class SaveAndLoad : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class SaveAndLoad : MonoBehaviour
     public GameObject wallF;
     public GameObject ceiling;
     public GameObject floor;
+
 
     //Room Name to be saved
     public TMP_InputField roomNameInput;
@@ -65,10 +67,13 @@ public class SaveAndLoad : MonoBehaviour
         if (roomNameInput != null && !string.IsNullOrEmpty(roomNameInput.text))
         {
             Save(roomNameInput.text);
+            GetComponent<ActivateSaveAndLoadUI>().ActivateSaveFeedbackUI($"Room '{roomNameInput.text}' saved successfully!");
+            
         }
         else
         {
-            Debug.LogError("TMP_InputField não está atribuído ou está vazio!");
+            GetComponent<ActivateSaveAndLoadUI>().ActivateErrorSaveFeedbackUI();
+           Debug.LogError("TMP_InputField não está atribuído ou está vazio!");
         }
     }
 

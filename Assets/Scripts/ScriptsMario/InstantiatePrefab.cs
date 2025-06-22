@@ -99,7 +99,7 @@ public class InstantiatePrefab : MonoBehaviour
 
         Debug.Log("Clique detectado!");
 
-        Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 1.0f;
+        Vector3 position = sceneCamera.transform.position + sceneCamera.transform.forward * 2.0f;
     
         //var obj = Instantiate(prefab, position, prefab.transform.rotation);
         var obj = GetComponent<FurnitureSpawner>().SpawnPrefab(pathPrefab, position, Quaternion.identity, type);

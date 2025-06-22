@@ -25,41 +25,61 @@ public class DeleteManager : MonoBehaviour
    }
 
     private float lastCallTime = 0f;
-    private float callCooldown = 0.3f; // 300 ms de intervalo mínimo
+    private float callCooldown = 0.3f; // 300 ms de intervalo mï¿½nimo
 
-    public void DeletionMode()
+    public void ActivateDeletionMode()
     {
         InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
         InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
-        if (Time.time - lastCallTime < callCooldown)
-        {
-            Debug.Log("Ignorado: chamada muito rápida");
-            return; // Ignora se a função foi chamada há menos de 0.3s
-        }
 
-        lastCallTime = Time.time;
-
-        if (DeleteMode)
-        {
-            Debug.Log("Modo de Deleção Desativado");
-            DeleteMode = false;
-            Lixeira.SetActive(false);
-            Debug.Log("Lixeira Desativada");
-        }
-        else
-        {
-            Debug.Log("Modo de Deleção Ativado");
-            DeleteMode = true;
-            Lixeira.SetActive(true);
-            Debug.Log("Lixeira Ativada");
-        }
+        Debug.Log("Modo de DeleÃ§Ã£o Ativado");
+        DeleteMode = true;
+        Lixeira.SetActive(true);
+        Debug.Log("Lixeira Ativada");
     }
 
     public void DeactivateDeletionMode()
     {
-        Debug.Log("Modo de Deleção Desativado");
+        InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
+        InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
+        Debug.Log("Modo de DeleÃ§Ã£o Desativado");
         DeleteMode = false;
         Lixeira.SetActive(false);
         Debug.Log("Lixeira Desativada");
     }
+    // public void DeletionMode()
+    // {
+    //     InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
+    //     InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
+    //     if (Time.time - lastCallTime < callCooldown)
+    //     {
+    //         Debug.Log("Ignorado: chamada muito rï¿½pida");
+    //         return; // Ignora se a funï¿½ï¿½o foi chamada hï¿½ menos de 0.3s
+    //     }
+
+    //     lastCallTime = Time.time;
+
+    //     if (DeleteMode)
+    //     {
+    //         Debug.Log("Modo de Deleï¿½ï¿½o Desativado");
+    //         DeleteMode = false;
+    //         Lixeira.SetActive(false);
+    //         Debug.Log("Lixeira Desativada");
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("Modo de Deleï¿½ï¿½o Ativado");
+    //         DeleteMode = true;
+    //         Lixeira.SetActive(true);
+    //         Debug.Log("Lixeira Ativada");
+    //     }
+    // }
+
+    // public void DeactivateDeletionMode()
+    // {
+    //     Debug.Log("Modo de Deleï¿½ï¿½o Desativado");
+    //     DeleteMode = false;
+    //     Lixeira.SetActive(false);
+    //     Debug.Log("Lixeira Desativada");
+    // }
 }

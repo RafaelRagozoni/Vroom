@@ -46,6 +46,8 @@ public class EditFurnitureManager : MonoBehaviour
         if (EditPrefab != null && editInstance == null)
         {
             editInstance = Instantiate(EditPrefab, position, rotation);
+            editInstance.transform.LookAt(sceneCamera.transform, Vector3.up);
+            editInstance.transform.Rotate(0, 0, 0);
         }
     }
 
