@@ -66,7 +66,7 @@ public class InstantiateTexturesUI : MonoBehaviour
         spawnedTexturePrefabs.Clear();
     }
     public void InstantiateTextureListUI(List<string> List)
-    {
+    {   GetComponent<ActivateSaveAndLoadUI>().DeactivateAllUI();
         for (int i = 0; i < List.Count; ++i)
         {
             x_position = sceneCamera.transform.position.x + r * Mathf.Cos(i * 2 * Mathf.PI / List.Count);

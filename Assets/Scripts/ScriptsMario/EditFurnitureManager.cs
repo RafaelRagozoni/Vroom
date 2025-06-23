@@ -42,6 +42,7 @@ public class EditFurnitureManager : MonoBehaviour
     // M�todo para ativar o modo de edi��o e instanciar o objeto
     public void ActivateEditFurnitureMode(Vector3 position, Quaternion rotation)
     {
+        GetComponent<ActivateSaveAndLoadUI>().DeactivateAllUI();
         EditFunitureMode = true;
         if (EditPrefab != null && editInstance == null)
         {

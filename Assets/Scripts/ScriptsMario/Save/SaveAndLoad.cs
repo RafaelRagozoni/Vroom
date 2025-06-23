@@ -26,6 +26,11 @@ public class SaveAndLoad : MonoBehaviour
     // Load UI Panel
     public GameObject loadUIPanel;
 
+    // Delete Dropdown for deleting rooms
+    public TMP_Dropdown deleteDropdown;
+    //Delete UI Panel
+    public GameObject deleteUIPanel;
+
     [System.Serializable]
     public class InstancedFurnitureData
     {
@@ -68,18 +73,21 @@ public class SaveAndLoad : MonoBehaviour
         {
             Save(roomNameInput.text);
             GetComponent<ActivateSaveAndLoadUI>().ActivateSaveFeedbackUI($"Room '{roomNameInput.text}' saved successfully!");
-            
+
         }
         else
         {
             GetComponent<ActivateSaveAndLoadUI>().ActivateErrorSaveFeedbackUI();
-           Debug.LogError("TMP_InputField não está atribuído ou está vazio!");
+            Debug.LogError("TMP_InputField não está atribuído ou está vazio!");
         }
     }
 
 
     public void Save(string roomName)
     {
+        InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
+        EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
+        InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
         var instantiatedFurniture = GetComponent<FurnitureSpawner>().InstantiatedFurnitureIds;
         var furniturePaths = GetComponent<FurnitureSpawner>().InstantiatedFurniturePaths;
         var sceneData = new SceneData();
@@ -212,14 +220,6 @@ public class SaveAndLoad : MonoBehaviour
         loadDropdown.value = 0; // Garante que a opção neutra está selecionada
     }
 
-    // Chame este método ao abrir a tela de Load, por exemplo no Start ou ao abrir o painel de Load
-
-    // public void OnDropdownLoadSelected()
-    // {
-    //     string selectedRoom = loadDropdown.options[loadDropdown.value].text;
-    //     Load(selectedRoom);
-    // }    
-
     public void OnDropdownLoadSelected()
     {
         // Só carrega se não for a opção neutra
@@ -228,4 +228,36 @@ public class SaveAndLoad : MonoBehaviour
         Load(selectedRoom);
         loadUIPanel.SetActive(false); // Fecha o painel de Load após carregar
     }
+
+    public void PopulateDeleteDropdown()
+    {
+        deleteDropdown.ClearOptions();
+        var roomNames = GetSavedRoomNames();
+        Debug.Log("Rooms encontrados para deletar: " + string.Join(", ", roomNames));
+        List<string> options = new List<string> { "Select a Room..." };
+        options.AddRange(roomNames);
+        deleteDropdown.AddOptions(options);
+        deleteDropdown.value = 0;
+    }
+
+
+    public void OnDropdownDeleteSelected()
+    {
+        if (deleteDropdown.value == 0) return;
+        string selectedRoom = deleteDropdown.options[deleteDropdown.value].text;
+        string path = Application.persistentDataPath + $"/sceneData_{selectedRoom}.json";
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+            Debug.Log($"Room '{selectedRoom}' deleted.");
+            PopulateDeleteDropdown(); // Atualiza a lista
+            PopulateLoadDropdown();   // Atualiza a lista de load também
+        }
+        else
+        {
+            Debug.LogError("File not found for deletion.");
+        }
+        deleteDropdown.value = 0; // Volta para a opção neutra
+    }
+
 }

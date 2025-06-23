@@ -31,7 +31,8 @@ public class DeleteManager : MonoBehaviour
     {
         InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
         InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
-
+        GetComponent<ActivateSaveAndLoadUI>().DeactivateAllUI();
+        
         Debug.Log("Modo de Deleção Ativado");
         DeleteMode = true;
         Lixeira.SetActive(true);

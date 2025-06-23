@@ -80,6 +80,7 @@ public class InstantiatePrefabUI : MonoBehaviour
     {
         EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
         InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
+        GetComponent<ActivateSaveAndLoadUI>().DeactivateAllUI();
         DeleteManager.Instance.DeactivateDeletionMode();
         if (CategoriesAddFurnitureMode==false && InstantiateFurnitureMode==false)
         {
