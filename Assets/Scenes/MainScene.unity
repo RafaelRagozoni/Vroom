@@ -14425,6 +14425,7 @@ MonoBehaviour:
   - Prefabs/FurnitureModels/Table/e00349c0-02d1-4d62-9299-1b32299dcc35/raw_model
   - Prefabs/FurnitureModels/Table/fe98de65-9939-4488-af3f-a6c6de4e471c/raw_model
   WallDecorationList:
+  - Prefabs/FurnitureModels/WallDecoration/door1/raw_model
   - Prefabs/FurnitureModels/WallDecoration/piet_painting/raw_model
   - Prefabs/FurnitureModels/WallDecoration/vangogh_painting/raw_model
   - Prefabs/FurnitureModels/WallDecoration/window-1/raw_model
