@@ -24,7 +24,7 @@ public class InstantiatePrefabUI : MonoBehaviour
     private float r = 1.5f;
     private float x_position;
     private float z_position;
-    
+
     public List<string> AuxPrefabList;
     public List<string> currentCategoryList;
     private int currentStartIndex;
@@ -82,7 +82,7 @@ public class InstantiatePrefabUI : MonoBehaviour
         InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
         GetComponent<ActivateSaveAndLoadUI>().DeactivateAllUI();
         DeleteManager.Instance.DeactivateDeletionMode();
-        if (CategoriesAddFurnitureMode==false && InstantiateFurnitureMode==false)
+        if (CategoriesAddFurnitureMode == false && InstantiateFurnitureMode == false)
         {
             for (int i = 0; i < FurnitureCategories.Count; ++i)
             {
@@ -99,16 +99,22 @@ public class InstantiatePrefabUI : MonoBehaviour
                 Quaternion rotation = Quaternion.LookRotation(directionToCamera);
 
 
-                GameObject prefab = GetComponent<FurnitureSpawner>().SpawnPrefab(FurnitureCategories[i],position,rotation);//Instantiate(FurnitureCategories[i], position, rotation);
+                GameObject prefab = GetComponent<FurnitureSpawner>().SpawnPrefab(FurnitureCategories[i], position, rotation);//Instantiate(FurnitureCategories[i], position, rotation);
 
                 spawnedPrefabs.Add(prefab);
-                
+
                 // Guarda o original para futura inst�ncia real
                 var holder = prefab.AddComponent<OriginalPrefabHolder>();
                 holder.originalPrefab = prefab;
 
                 // NORMALIZA O TAMANHO para UI
                 NormalizeScale(prefab);
+
+                // Rotaciona objetos do tipo wall para facilitar a visualização
+                if (FurnitureCategories[i].Contains("Wall"))
+                {
+                    prefab.transform.Rotate(-90, 0, 180);
+                }
 
                 var grabbable = prefab.GetComponentInChildren<Grabbable>();
                 if (grabbable != null)
@@ -131,14 +137,14 @@ public class InstantiatePrefabUI : MonoBehaviour
             }
             CategoriesAddFurnitureMode = true;
         }
-        
+
     }
 
-    public void InstantiateListUI(List<string> List,FurnitureType type=FurnitureType.Floor)
+    public void InstantiateListUI(List<string> List, FurnitureType type = FurnitureType.Floor)
     {
         for (int i = 0; i < List.Count; ++i)
         {
-            
+
             x_position = sceneCamera.transform.position.x + r * Mathf.Cos(i * 2 * Mathf.PI / List.Count);
             z_position = sceneCamera.transform.position.z + r * Mathf.Sin(i * 2 * Mathf.PI / List.Count);
 
@@ -160,6 +166,13 @@ public class InstantiatePrefabUI : MonoBehaviour
 
             // NORMALIZA O TAMANHO para UI
             NormalizeScale(prefab);
+
+
+            // Rotaciona objetos do tipo wall para facilitar a visualização
+            if (List[i].Contains("Wall"))
+            {
+                prefab.transform.Rotate(-90, 0, 180);
+            }
 
             // Remove intera��es n�o desejadas na UI
             var categoryClickManager = prefab.GetComponentInChildren<CategoriesObjectClickManager>();

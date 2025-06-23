@@ -334,19 +334,19 @@ namespace Oculus.Interaction
                 }
                 else if (Vector3.Dot(Vector3.forward, surfaceNormal) > 0.9)
                 {
-                    transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+                    transform.rotation = Quaternion.Euler(-90.0f, 0.0f, 180.0f);
                 }
                 else if (Vector3.Dot(Vector3.forward, surfaceNormal) < -0.9)
                 {
-                    transform.rotation = Quaternion.Euler(90.0f, 180.0f, 0.0f);
+                    transform.rotation = Quaternion.Euler(-90.0f, 180.0f, 180.0f);
                 }
                 else if (Vector3.Dot(Vector3.right, surfaceNormal) > 0.9)
                 {
-                    transform.rotation = Quaternion.Euler(90.0f, 90.0f, 0.0f);
+                    transform.rotation = Quaternion.Euler(-90.0f, 90.0f, 180.0f);
                 }
                 else if (Vector3.Dot(Vector3.right, surfaceNormal) < -0.9)
                 {
-                    transform.rotation = Quaternion.Euler(90.0f, -90.0f, 0.0f);
+                    transform.rotation = Quaternion.Euler(-90.0f, -90.0f, 180.0f);
                 }
             }
         }

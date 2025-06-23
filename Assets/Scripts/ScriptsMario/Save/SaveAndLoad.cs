@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 using System.IO;
 using UnityEngine.UI;
+using Oculus.Interaction;
 
 public class SaveAndLoad : MonoBehaviour
 {
@@ -38,6 +39,7 @@ public class SaveAndLoad : MonoBehaviour
         public Quaternion Rotation;
         public Vector3 Scale;
         public string FurnitureModelPath;
+        public FurnitureType Type;
     }
     [System.Serializable]
     public class RoomData
@@ -104,7 +106,8 @@ public class SaveAndLoad : MonoBehaviour
                     Position = modelGameObject.transform.position,
                     Rotation = modelGameObject.transform.rotation,
                     Scale = modelGameObject.transform.localScale,
-                    FurnitureModelPath = furniturePaths[furniture.FurnitureBaseId]
+                    FurnitureModelPath = furniturePaths[furniture.FurnitureBaseId],
+                    Type = modelGameObject.transform.GetChild(1).GetComponent<FurnitureGrabTransformer>().type
                 };
                 sceneData.InstancedFurnitures.Add(data);
             }
@@ -146,7 +149,7 @@ public class SaveAndLoad : MonoBehaviour
             foreach (var furnitureData in sceneData.InstancedFurnitures)
             {
                 Debug.Log($"Loading Furniture Model Path: {furnitureData.FurnitureModelPath}");
-                GameObject spawnedFurniture = GetComponent<FurnitureSpawner>().SpawnPrefab(furnitureData.FurnitureModelPath, furnitureData.Position, furnitureData.Rotation);
+                GameObject spawnedFurniture = GetComponent<FurnitureSpawner>().SpawnPrefab(furnitureData.FurnitureModelPath, furnitureData.Position, furnitureData.Rotation, furnitureData.Type);
                 if (spawnedFurniture != null)
                 {
                     spawnedFurniture.transform.localScale = furnitureData.Scale;
