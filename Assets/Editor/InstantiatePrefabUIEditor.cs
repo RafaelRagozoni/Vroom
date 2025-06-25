@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 [CustomEditor(typeof(InstantiatePrefabUI))]
 public class InstantiatePrefabUIEditor : Editor
@@ -51,11 +52,13 @@ public class InstantiatePrefabUIEditor : Editor
         }
 
         string[] files = Directory.GetFiles(resourcesPath, "raw_model.obj", SearchOption.AllDirectories);
+        files = files.Concat(Directory.GetFiles(resourcesPath, "raw_model.prefab", SearchOption.AllDirectories)).ToArray();
         foreach (var file in files)
         {
             string relPath = file.Substring(file.IndexOf("Resources") + "Resources".Length + 1);
             relPath = relPath.Replace("\\", "/");
-            relPath = relPath.Substring(0, relPath.Length - ".obj".Length);
+            relPath = Path.Combine(Path.GetDirectoryName(relPath), Path.GetFileNameWithoutExtension(relPath));
+            //relPath = relPath.Substring(0, relPath.Length - ".obj".Length);
             paths.Add(relPath);
         }
         return paths;
