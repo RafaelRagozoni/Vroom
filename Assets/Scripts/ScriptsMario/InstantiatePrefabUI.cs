@@ -253,61 +253,61 @@ public class InstantiatePrefabUI : MonoBehaviour
 
     private bool canClick = true;
 
-    // public void CycleInstantiatedChunk()
-    // {
-    //     if(InstantiateFurnitureMode==true)
-    //     {
-    //         if (!canClick)
-    //         {
-    //             Debug.Log("Aguarde antes de clicar novamente.");
-    //             return;
-    //         }
+    public void CycleInstantiatedChunk()
+    {
+        if(InstantiateFurnitureMode==true)
+        {
+            if (!canClick)
+            {
+                Debug.Log("Aguarde antes de clicar novamente.");
+                return;
+            }
 
-    //         canClick = false;  // Bloqueia novos cliques
-    //         StartCoroutine(EnableClickAfterDelay(0.3f));  // Reativa ap�s delay
+            canClick = false;  // Bloqueia novos cliques
+            StartCoroutine(EnableClickAfterDelay(0.3f));  // Reativa ap�s delay
 
-    //         Debug.Log("Valor de ChunkSize dentro da fun��o: " + ChunkSize);
-    //         Debug.Log("Valor de currentStartIndex dentro da fun��o: " + currentStartIndex);
+            Debug.Log("Valor de ChunkSize dentro da fun��o: " + ChunkSize);
+            Debug.Log("Valor de currentStartIndex dentro da fun��o: " + currentStartIndex);
 
-    //         DeactivateAddFurnitureMode();
-    //         currentStartIndex = (currentStartIndex + ChunkSize) % currentCategoryList.Count;
-    //         UpdateAuxList(currentCategoryList, ChunkSize, currentStartIndex);
-    //         InstantiateListUI(AuxPrefabList);
-    //         InstantiateFurnitureMode = true;
-    //     }    
-    // }
+            DeactivateAddFurnitureMode();
+            currentStartIndex = (currentStartIndex + ChunkSize) % currentCategoryList.Count;
+            UpdateAuxList(currentCategoryList, ChunkSize, currentStartIndex);
+            InstantiateListUI(AuxPrefabList);
+            InstantiateFurnitureMode = true;
+        }    
+    }
 
-    // public void CycleInstantiatedChunkBackwards()
-    // {
-    //     if(InstantiateFurnitureMode==true)
-    //     {
-    //         if (!canClick)
-    //         {
-    //             Debug.Log("Aguarde antes de clicar novamente.");
-    //             return;
-    //         }
+    public void CycleInstantiatedChunkBackwards()
+    {
+        if(InstantiateFurnitureMode==true)
+        {
+            if (!canClick)
+            {
+                Debug.Log("Aguarde antes de clicar novamente.");
+                return;
+            }
 
-    //         canClick = false;
-    //         StartCoroutine(EnableClickAfterDelay(0.3f));
+            canClick = false;
+            StartCoroutine(EnableClickAfterDelay(0.3f));
 
-    //         Debug.Log("Valor de ChunkSize dentro da fun��o: " + ChunkSize);
-    //         Debug.Log("Valor de currentStartIndex dentro da fun��o: " + currentStartIndex);
+            Debug.Log("Valor de ChunkSize dentro da fun��o: " + ChunkSize);
+            Debug.Log("Valor de currentStartIndex dentro da fun��o: " + currentStartIndex);
 
-    //         DeactivateAddFurnitureMode();
+            DeactivateAddFurnitureMode();
 
-    //         // Atualiza o �ndice para tr�s, garantindo que continue no intervalo correto
-    //         currentStartIndex = (currentStartIndex - ChunkSize + currentCategoryList.Count) % currentCategoryList.Count;
+            // Atualiza o �ndice para tr�s, garantindo que continue no intervalo correto
+            currentStartIndex = (currentStartIndex - ChunkSize + currentCategoryList.Count) % currentCategoryList.Count;
 
-    //         UpdateAuxList(currentCategoryList, ChunkSize, currentStartIndex);
-    //         InstantiateListUI(AuxPrefabList);
-    //         InstantiateFurnitureMode = true;
-    //     }
-    // }
+            UpdateAuxList(currentCategoryList, ChunkSize, currentStartIndex);
+            InstantiateListUI(AuxPrefabList);
+            InstantiateFurnitureMode = true;
+        }
+    }
 
-    // private IEnumerator EnableClickAfterDelay(float delay)
-    // {
-    //     yield return new WaitForSeconds(delay);
-    //     canClick = true;
-    // }
+    private IEnumerator EnableClickAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        canClick = true;
+    }
 
 }

@@ -18,6 +18,10 @@ public class OpenRoomEditMode : MonoBehaviour
 
     public RoomReshaper roomReshaper;
 
+    private void Start()
+    {
+        dentro = true;
+    }
 
     public void OpenEditRoomModeFunction()
     {
@@ -31,14 +35,16 @@ public class OpenRoomEditMode : MonoBehaviour
         oculusCursorLeft.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
         selectionCircleRight.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
         selectionCircleLeft.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+        dentro = false;
         //roomReshaper.enabled = true;
     }
 
     public void CloseEditRoomModeFunction()
     {
+        if (dentro) return;
         InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
         InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
-        
+
         sceneCamera.transform.position = new Vector3(0, 0, 0);
         sceneCamera.transform.rotation = Quaternion.Euler(0, 0, 0);
         rayInteractorRight.MaxRayLength = 5;
@@ -47,6 +53,7 @@ public class OpenRoomEditMode : MonoBehaviour
         oculusCursorLeft.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
         selectionCircleRight.transform.localScale = new Vector3(0.016f, 0.016f, 1f);
         selectionCircleLeft.transform.localScale = new Vector3(0.016f, 0.016f, 1f);
+        dentro = true;
         //roomReshaper.enabled = false;
     }
 
