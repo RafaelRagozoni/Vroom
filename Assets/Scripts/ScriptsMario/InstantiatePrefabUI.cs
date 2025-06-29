@@ -142,6 +142,7 @@ public class InstantiatePrefabUI : MonoBehaviour
 
     public void InstantiateListUI(List<string> List, FurnitureType type = FurnitureType.Floor)
     {
+        this.currentType = type;
         for (int i = 0; i < List.Count; ++i)
         {
 
@@ -252,6 +253,7 @@ public class InstantiatePrefabUI : MonoBehaviour
 
 
     private bool canClick = true;
+    private FurnitureType currentType;
 
     public void CycleInstantiatedChunk()
     {
@@ -272,7 +274,7 @@ public class InstantiatePrefabUI : MonoBehaviour
             DeactivateAddFurnitureMode();
             currentStartIndex = (currentStartIndex + ChunkSize) % currentCategoryList.Count;
             UpdateAuxList(currentCategoryList, ChunkSize, currentStartIndex);
-            InstantiateListUI(AuxPrefabList);
+            InstantiateListUI(AuxPrefabList, currentType);
             InstantiateFurnitureMode = true;
         }    
     }
@@ -299,7 +301,7 @@ public class InstantiatePrefabUI : MonoBehaviour
             currentStartIndex = (currentStartIndex - ChunkSize + currentCategoryList.Count) % currentCategoryList.Count;
 
             UpdateAuxList(currentCategoryList, ChunkSize, currentStartIndex);
-            InstantiateListUI(AuxPrefabList);
+            InstantiateListUI(AuxPrefabList, currentType);
             InstantiateFurnitureMode = true;
         }
     }

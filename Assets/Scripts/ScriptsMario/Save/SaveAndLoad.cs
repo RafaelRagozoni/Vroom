@@ -129,6 +129,47 @@ public class SaveAndLoad : MonoBehaviour
         Debug.Log("Scene data saved successfully.");
     }
 
+    public void SaveAuto()
+    {
+        string roomName = "autosave";
+        InstantiatePrefabUI.Instance.DeactivateAddFurnitureMode();
+        EditFurnitureManager.Instance.DeactivateEditFurnitureMode();
+        InstantiateTexturesUI.Instance.DeactivateTextureEditMode();
+        var instantiatedFurniture = GetComponent<FurnitureSpawner>().InstantiatedFurnitureIds;
+        var furniturePaths = GetComponent<FurnitureSpawner>().InstantiatedFurniturePaths;
+        var sceneData = new SceneData();
+        foreach (var furniture in instantiatedFurniture)
+        {
+            var modelGameObject = FindGameObjectByInstanceID(furniture.FurnitureBaseId);
+            if (modelGameObject != null)
+            {
+                InstancedFurnitureData data = new InstancedFurnitureData
+                {
+                    Position = modelGameObject.transform.position,
+                    Rotation = modelGameObject.transform.rotation,
+                    Scale = modelGameObject.transform.localScale,
+                    FurnitureModelPath = furniturePaths[furniture.FurnitureBaseId],
+                    Type = modelGameObject.transform.GetChild(1).GetComponent<FurnitureGrabTransformer>().type
+                };
+                sceneData.InstancedFurnitures.Add(data);
+            }
+        }
+        // Saving Room Data
+        sceneData.RoomData.Materials[0] = floor.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.Materials[1] = ceiling.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.Materials[2] = wallL.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.Materials[3] = wallR.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.Materials[4] = wallF.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.Materials[5] = wallB.GetComponent<Renderer>().material.name.Replace(" (Instance)", "");
+        sceneData.RoomData.GizmosPosition = GetComponent<RoomReshaper>().GetGizmoPosition();
+
+        string json = JsonUtility.ToJson(sceneData, true);
+        System.IO.File.WriteAllText(Application.persistentDataPath + $"/sceneData_{roomName}.json", json);
+        Debug.Log($"Scene data autosaved at: {Application.persistentDataPath}/sceneData_{roomName}.json");
+    }
+
+
+
     public void Load(string roomName)
     {
         string path = Application.persistentDataPath + $"/sceneData_{roomName}.json";
@@ -161,7 +202,8 @@ public class SaveAndLoad : MonoBehaviour
             GetComponent<RoomReshaper>().MoveGizmos(sceneData.RoomData.GizmosPosition);
             // Apply Materials to Walls and Floor
             var materialsPathDict = GetComponent<MaterialsPathDict>();
-
+            Debug.Log("Loading Materials for Walls and Floor");
+            Debug.Log($"Floor Material: {materialsPathDict.GetPathByName(sceneData.RoomData.Materials[0])}");
             floor.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[0]));
             ceiling.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[1]));
             wallL.GetComponent<Renderer>().material = Resources.Load<Material>(materialsPathDict.GetPathByName(sceneData.RoomData.Materials[2]));
