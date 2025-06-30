@@ -1,2 +1,1 @@
-# Vroom
-VR/XR project to help visualize and create simple yet immersive ambients
+Utilizando esse repo para exportar https://github.com/z3lx/acg-importer
