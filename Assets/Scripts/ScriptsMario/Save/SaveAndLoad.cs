@@ -105,7 +105,7 @@ public class SaveAndLoad : MonoBehaviour
                 {
                     Position = modelGameObject.transform.position,
                     Rotation = modelGameObject.transform.rotation,
-                    Scale = modelGameObject.transform.localScale,
+                    Scale = modelGameObject.transform.Find("raw_model(Clone)").localScale,
                     FurnitureModelPath = furniturePaths[furniture.FurnitureBaseId],
                     Type = modelGameObject.transform.GetChild(1).GetComponent<FurnitureGrabTransformer>().type
                 };
@@ -147,7 +147,7 @@ public class SaveAndLoad : MonoBehaviour
                 {
                     Position = modelGameObject.transform.position,
                     Rotation = modelGameObject.transform.rotation,
-                    Scale = modelGameObject.transform.localScale,
+                    Scale = modelGameObject.transform.Find("raw_model(Clone)").localScale,
                     FurnitureModelPath = furniturePaths[furniture.FurnitureBaseId],
                     Type = modelGameObject.transform.GetChild(1).GetComponent<FurnitureGrabTransformer>().type
                 };
@@ -193,7 +193,11 @@ public class SaveAndLoad : MonoBehaviour
                 GameObject spawnedFurniture = GetComponent<FurnitureSpawner>().SpawnPrefab(furnitureData.FurnitureModelPath, furnitureData.Position, furnitureData.Rotation, furnitureData.Type);
                 if (spawnedFurniture != null)
                 {
-                    spawnedFurniture.transform.localScale = furnitureData.Scale;
+                    var rawModel = spawnedFurniture.transform.Find("raw_model(Clone)");
+                    if (rawModel != null)
+                    {
+                        rawModel.localScale = furnitureData.Scale;
+                    }
                 }
             }
             Debug.Log("Scene data loaded successfully.");
